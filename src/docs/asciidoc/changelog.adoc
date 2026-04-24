@@ -1,0 +1,7 @@
+ifdef::revnumber[]
+include::CHANGELOG.adoc[]
+endif::revnumber[]
+
+ifndef::revnumber[]
+include::../../../CHANGELOG.adoc[]
+endif::revnumber[]

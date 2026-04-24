@@ -1,0 +1,73 @@
+app:
+  foo: bar
+  authentication:
+    host: ${KERBEROS_LOGIN_SERVICE:`http://localhost:8888`}
+    roles-required:
+      -
+endpoints:
+  info:
+    sensitive: false
+  routes:
+    sensitive: false
+  loggers:
+    sensitive: false
+  env:
+    sensitive: false
+  threaddump:
+    sensitive: false
+    flyway:
+      enabled: true
+      sensitive: false
+
+# properties invented for demonstration purposes.
+property:
+  lastUpdated: 2022-12-13
+  source: "google"
+  countries:
+    - name: "Denmark"
+      population: 5857000
+      Capitol: "København"
+      country-code: 208
+      eu-member: true
+    - name: "Tyskland"
+      population: 83130000
+      Capitol: "Berlin"
+      country-code: 276
+      eu-member: true
+    - name: "USA"
+      population: 331900000
+      Capitol: "Washington D.C."
+      country-code: 840
+      eu-member: false
+
+---
+flyway:
+  datasources:
+    default:
+      enabled: true
+      locations:
+        - classpath:db
+---
+micronaut:
+  security:
+    token:
+      jwt: #The below is only enabled to be able to create tokens in test
+        enabled: true
+        signatures:
+          secret:
+            generator:
+              secret: ${JWT_SECRET:`pleaseChangeThisSecretForANewOne`}
+        generator: #used only in test
+          refresh-token:
+            enabled: true
+            secret: ${JWT_SECRET:`pleaseChangeThisSecretForANewOne`}
+---
+logger:
+  levels:
+    io.micronaut.data.query: TRACE
+
+test-resources:
+  containers:
+    mssql:
+      accept-license: true
+      image: mcr.microsoft.com/mssql/server:2019-latest

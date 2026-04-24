@@ -1,0 +1,160 @@
+app:
+  authentication:
+    key-prefix: JAP-
+    jwt-key-suffix: JWT
+    status-key-suffix: STATUS
+    host: ${KERBEROS_LOGIN_SERVICE:`https://demo-kerberos-login-service.jap.rsyd.net`}
+micronaut:
+  application:
+    name: baselineController
+  server:
+    netty:
+      access-logger:
+        enabled: true
+        logger-name: HTTP_ACCESS
+        # From io.micronaut.http.server.netty.handler.accesslog.element.AccessLogFormatParser:
+        # common - %h %l %U %t "%r" %s %b Common Log Format (CLF)
+        # combined - %h %l %U %t "%r" %s %b "%{Referer}i" "%{User-Agent}i" Combined Log Format
+        log-format: remote=%a request="%r" status=%s bytes=%b time.ms=%D
+        exclusions:
+          - /assets/js/materialize.min.js
+          - /assets/js/init.js
+          - /assets/js/jquery.min.js
+          - /assets/css/materialize.min.css
+          - /assets/rsyd-slash.png
+          - /assets/favicon.ico
+          - /favicon.ico
+          - /health
+---
+micronaut:
+  security:
+    authentication: cookie #Require "bearer" value to be able to look up "micronaut.TOKEN"
+    redirect:
+      #login-success: /login/auth
+      login-failure: /login/authFailed
+      unauthorized:
+        url: /login/auth-sso #This will redirect the browser to this url if not authorized
+      prior-to-login: true #This ensures that the browser will be redirected back to originating page
+      enabled: true
+    session:
+      enabled: false #Not sure i have anny effect to enable this
+---
+micronaut:
+  security:
+    enabled: true # defaults to Basic Auth
+    token:
+      enabled: true
+      jwt:
+        enabled: true
+        claims-validators:
+          issuer: "kerberos-login-service"
+          subject-not-null: true
+          expiration: true
+        signatures:
+          secret:
+            generator:
+              secret: ${JWT_SECRET:`pleaseChangeThisSecretForANewOne`} #TODO Rest the value. Current value is taken from demo
+        cookie:
+          enabled: true
+          cookie-http-only: true
+          cookie-max-age: 30m
+        bearer:
+          enabled: false
+        generator:
+          access-token:
+            expiration: 1800
+    intercept-url-map:
+      - pattern: "/swagger-ui/**"
+        access:
+          - isAnonymous()
+      - pattern: "/swagger/*"
+        access:
+          - isAnonymous()
+      - pattern: "/docs"
+        access:
+          - isAnonymous()
+      - pattern: "/docs/*"
+        access:
+          - isAnonymous()
+      - pattern: "/docs/**"
+        access:
+          - isAnonymous()
+      - pattern: "/assets/*"
+        access:
+          - isAnonymous()
+      - pattern: "/assets/**"
+        access:
+          - isAnonymous()
+      - pattern: "/*"
+        access:
+          - isAnonymous()
+      - pattern: "/"
+        access:
+          - isAnonymous()
+---
+micronaut:
+  router:
+    static-resources:
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: "/swagger/**"
+      swagger-ui:
+        paths: classpath:META-INF/swagger/views/swagger-ui
+        mapping: "/swagger-ui/**"
+      docs:
+        paths: classpath:/docs
+        mapping: "/docs/**"
+      assets:
+        paths: classpath:/assets
+        mapping: "/assets/**"
+      www:
+        paths: classpath:/www
+        mapping: "/**"
+---
+micronaut:
+  metrics:
+    enabled: true
+---
+endpoints:
+  health:
+    enabled: true
+    disk-space:
+      enabled: false
+  info:
+    enabled: true
+    sensitive: true
+  routes:
+    enabled: true
+  loggers:
+    enabled: true
+  env:
+    enabled: true
+  metrics:
+    enabled: true
+    details-visible: anonymous
+    sensitive: false
+---
+logger:
+  levels:
+    root: INFO
+    dk.rsyd.jap.baseline: INFO
+    io.micronaut.security: DEBUG
+    dk.rsyd.jap.baseline.api.JAPJWTTokenReader: TRACE
+    io.micronaut.security.filters.SecurityFilter: DEBUG
+    io.micronaut.security.token.jwt: DEBUG
+    io.micronaut.security.token.reader: DEBUG
+    io.micronaut.security.authentication: DEBUG
+    io.micronaut.security.rules.IpPatternsRule: INFO
+    io.micronaut.security.rules.AbstractSecurityRule: INFO
+    io.micronaut.security.rules.InterceptUrlMapRule: INFO
+    io.micronaut.security.token.jwt.validator: TRACE
+
+---
+gitlab:
+  access-token: ${GITLAB_ACCESS_TOKEN}
+---
+micronaut:
+  http:
+    services:
+      gitlab:
+        url: 'https://gitlab.com/'

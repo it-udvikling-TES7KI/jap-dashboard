@@ -1,0 +1,57 @@
+//https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+configurations {
+    mockitoAgent
+}
+
+dependencies {
+    mockitoAgent("org.mockito:mockito-core:5.+") {
+        transitive = false
+    }
+}
+tasks {
+    test {
+        jvmArgs += "-javaagent:${configurations.mockitoAgent.asPath}"
+    }
+}
+
+compileJava {
+    options.incremental = true
+    options.encoding = "UTF-8"
+    options.warnings = true
+    options.deprecation = true
+    options.compilerArgs += ['-parameters', "-Xlint:all", "-nowarn"]
+}
+
+compileTestJava {
+    options.encoding = "UTF-8"
+    options.warnings = true
+    options.deprecation = true
+    options.compilerArgs += ['-parameters', "-Xlint:all", "-nowarn"]
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+javadoc {
+    options.encoding = "UTF-8"
+}
+
+test {
+    useJUnitPlatform()
+    jvmArgs += ["-XX:+EnableDynamicAgentLoading", "-javaagent:${configurations.mockitoAgent.asPath}"]
+    //Will Log name and status of each test when using Gradle build
+    testLogging {
+        events "passed", "failed"
+    }
+    finalizedBy jacocoTestReport //Enables Coverages report in CI
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+        csv.required = false
+    }
+    dependsOn test // tests are required to run before generating the report
+}

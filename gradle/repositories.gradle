@@ -1,0 +1,16 @@
+repositories {
+
+    //Use this to point at a Gitlab.com hosted projects maven repo
+    //Switch the id 6395180 to the relevant project id
+    maven {
+        url = "https://gitlab.com/api/v4/groups/6395180/-/packages/maven"
+        credentials(HttpHeaderCredentials) {
+            name = project.hasProperty("gitLabPrivateToken") ? 'Private-Token' : 'Job-Token'
+            value = project.hasProperty("gitLabPrivateToken") ? gitLabPrivateToken : System.getenv("CI_JOB_TOKEN")
+        }
+        authentication {
+            header(HttpHeaderAuthentication)
+        }
+    }
+    mavenCentral()
+}

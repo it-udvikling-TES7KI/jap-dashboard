@@ -1,0 +1,16 @@
+app:
+  foo: bar
+
+endpoints:
+  info:
+    sensitive: false
+  routes:
+    sensitive: false
+  loggers:
+    sensitive: false
+  env:
+    sensitive: false
+  threaddump:
+    sensitive: false
+
+

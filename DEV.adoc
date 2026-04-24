@@ -1,0 +1,60 @@
+== Udvikling (backend)
+
+Hvis du vil køre projektet lokalt, skal følgende udføres/sættes op.
+
+=== Forudsætninger
+- http://java.com/en/[JAVA]
+- https://gradle.org/[Gradle]
+- https://micronaut.io/[Micronaut]
+
+=== Dependencies
+Der anvendes Gradle til at håndtere afhængigheder, samt bygge og klargøre servicen til deployment.
+
+Det bør fremgå af link:gradle/java.gradle[java.gradle] hvilken version af Java projekter kræver.
+
+Sørg for at Gradle har indlæst dependencies, i roden af projektet køres:
+----
+./gradlew build
+----
+Dette sikre at alle dependencies er henter og at Micronaut bør kunne starte.
+
+Ændringer til dependencies sker via link:build.gradle[build.gradle] i `dependecies` sektionen.
+
+=== Run Java Application
+link:https://www.jetbrains.com/help/idea/run-java-applications.html[Tutorial: Run a Java application]
+
+==== Opsæt run config
+Servicen kan startes via den "grønne" pil i venstre side, når man åbner nedenstående:
+
+I link:src/main/java/dk/rsyd/jap/dashboard/Application.java[Application.java] startes backenden, dette opretter også en run config i IntelliJ.
+
+
+[source,java]
+----
+include::src/main/java/dk/rsyd/jap/dashboard/Application.java[tags=main]
+----
+
+Rediger run config og sæt _Environment variables_ til
+[source,bash]
+----
+MICRONAUT_ENVIRONMENTS=dev
+JWT_SECRET=$DEMO_JWT_KEY
+----
+
+$DEMO_JWT_KEY kan hentes via Gitlab/kollega/andet JAP projekt.
+
+Dette sikre at du starter Micronaut op med config værdier defineret i:
+link:src/main/resources/application-dev.yml[]
+
+==== Run Application
+Nu kan du starte backenden ved at køre den nye run config `Application`.
+
+=== Test framework
+Micronaut https://micronaut-projects.github.io/micronaut-test/latest/guide/#junit5[JUnit 5]
+
+Der opfordres til at anvende RestAssured til at test kald mod controlleres. Dette er for at sikre at MN specifik opførsel bliver testet ordentligt.
+
+=== Frontend
+Frontend er at finde i link:ui/[ui] mappen.
+
+Nærmere beskrivelse af opsætning af frontend udvikling kan findes i link:ui/README.md[]

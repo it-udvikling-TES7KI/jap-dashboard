@@ -1,0 +1,11 @@
+docker {
+    javaApplication {
+        maintainer = 'udvikling.it@rsyd.dk'
+        baseImage = "harbor.rsyd.net/jap/rsyd-base-images/jre21:latest"
+        ports = [8080]
+        def buildTag = System.getenv("CI_COMMIT_SHORT_SHA") ? System.getenv("CI_COMMIT_SHORT_SHA") : "latest"
+        def imageUrl = System.getenv("HARBOR_HOST") ?  "harbor.rsyd.net/jap/"+ System.getenv("CI_PROJECT_NAME") : "$project.name"
+        images = ["$imageUrl:$project.version","$imageUrl:$buildTag"]
+        jvmArgs = ["-Xmx256M", "-XX:ActiveProcessorCount=2", "-XX:MaxDirectMemorySize=256M"]
+    }
+}

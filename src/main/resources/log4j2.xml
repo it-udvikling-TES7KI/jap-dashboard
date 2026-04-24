@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="LogToConsole" target="SYSTEM_OUT">
+            <PatternLayout disableAnsi="false"
+                           pattern="%d %notEmpty{#$${env:NOMAD_ALLOC_ID:--}}%notEmpty{@${env:NOMAD_ALLOC_INDEX:--}} [%t] %highlight{%-5level %logger{36} %notEmpty{- ID=%X{messageID} }- %msg %n}{ FATAL=red blink, ERROR=red, WARN=yellow, INFO=normal, DEBUG=green, TRACE=cyan}"/>
+        </Console>
+        <Console name="HttpToConsole" target="SYSTEM_OUT">
+            <PatternLayout disableAnsi="false"
+                           pattern="%d %notEmpty{#$${env:NOMAD_ALLOC_ID:--}}%notEmpty{@${env:NOMAD_ALLOC_INDEX:--}} %highlight{%logger{36} - %msg%n}{ FATAL=red blink, ERROR=red, WARN=yellow, INFO=normal, DEBUG=green, TRACE=cyan}"/>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="dk.rsyd.jap" level="info" additivity="false">
+            <AppenderRef ref="LogToConsole"/>
+        </Logger>
+        <Logger name="HTTP_ACCESS" level="info" additivity="false">
+            <AppenderRef ref="HttpToConsole"/>
+        </Logger>
+        <Root level="info">
+            <AppenderRef ref="LogToConsole"/>
+        </Root>
+    </Loggers>
+</Configuration>

@@ -1,0 +1,153 @@
+= Project Name
+:icons: font
+ifndef::revnumber[]
+:sourcedir: ../../../src/main/
+:asciidocDir: .
+endif::revnumber[]
+
+xref:/changelog.adoc[CHANGELOG]
+
+link:../swagger-ui/index.html[Swagger UI + OpenAPI Spec]
+
+// Dokumenation for AsciiDoc https://docs.asciidoctor.org/asciidoc/latest/
+Write a short introduction about your project
+
+== Build
+
+Explain what it requires and how to build the project. For example:
+
+This project requires Java 11 (min) and you can build it executing the following command:
+
+[source,console]
+----
+./gradlew build
+----
+
+== Architecture
+
+When you document your architecture you can use different `diagrams` blocks as
+for example `plantuml`
+
+[plantuml,{relfileprefix}/sequense,png]
+----
+Alice -> Bob: Authentication Request
+Bob --> Alice: Authentication Response
+
+Alice -> Bob: Another authentication Request
+Alice <-- Bob: another authentication Response
+----
+
+== Implementation
+// https://docs.asciidoctor.org/asciidoc/latest/blocks/admonitions/
+IMPORTANT: It is possible to use call out
+
+Remember you can include piece of code extracted from your project using the `include` directive
+
+// https://docs.asciidoctor.org/asciidoc/latest/directives/include/
+== Include Java source
+[source,java]
+----
+include::{sourcedir}java/dk/rsyd/jap/dashboard/Application.java[tags=main]
+----
+
+== Include Example HTMl
+
+[source,html]
+----
+include::{asciidocDir}/example.html[Example]
+----
+
+== Date Format
+
+Micronaut uses the RFC-1123 format for handling dates.
+----
+Standard Micronaut Date as String:
+Fri, 01 Mar 2019 15:00:00 GMT
+----
+if this format is not desired, a workaround is to force the format annotation like so, using the ISO 8601 format:
+----
+getDate(@Format("yyyy-MM-dd") Optional<LocalDate> date)
+
+Formated Date as String:
+2008-03-01
+----
+
+The FormatController has two methods to test parsing of date through micronaut, one with formatting and one without.
+
+== Hibernate in-memory database (H2):
+
+A Hibernate in-memory database is being created on startup, using H2 Dialect. (should probably be changed to handle database start/stop on command) the type of dialect can be expanded upon.
+
+The database contains a single type of Entity. The entity Holiday contains Long id, String name and LocalDate date. The date is formatted using ISO 8601 format.
+----
+"holiday"
+{
+"id": Long,
+"name": "string",
+"day": "date"
+}
+----
+
+The HibernateController contains all CRUD-methods:
+
+==== Create
+The Post method, save, is used to create Holidays in the in-memory database.
+By inserting the following in swagger, we can create a Holiday in this instance of the database:
+----
+"holiday"
+{
+"name": "nameOfHoliday",
+"day": "2022-03-21"
+}
+----
+NOTE: The id is not being used in the creation request, as the id is specified to be auto-generated to be one greater than the highest id created in the db.
+ Even if u delete the highest valued id, when a new is created, the id will be one greater than the one just deleted. 2 Holidays with the same id can never be created, even if one has been deleted.
+
+==== Read
+There are three Get methods to find a specific Holiday, one for each parameter.
+----
+localhost:8080/api/hibernate/controller/findbyid/id
+----
+returns the holiday with a unique id.
+----
+localhost:8080/api/hibernate/controller/findbyname/name
+----
+returns all holidays with a specific name.
+----
+localhost:8080/api/hibernate/controller/findbydate/date
+----
+returns all holidays on a specific date.
+
+==== Update
+There are two Put methods to update a specific Holiday, using the id. One for updating name, and one for updating the date.
+
+Change Date:
+----
+{"id": 1,
+"day": "2022-03-21"}
+----
+Change Name:
+----
+{"id": 1,
+"name": "newName"}
+----
+
+NOTE: A new method has to be created if you want to change both attributes in one call.
+
+==== Delete
+There are two Delete methods to delete a specific Holiday. One by defining an entire Holiday, and one to delete a Holiday by its id.
+
+Delete by object:
+----
+"holiday"
+{
+"id": 1,
+"name": "nameOfHoliday",
+"day": "date"
+}
+----
+
+Delete by Id:
+----
+localhost:8080/api/hibernate/controller/deletebyid/id
+----

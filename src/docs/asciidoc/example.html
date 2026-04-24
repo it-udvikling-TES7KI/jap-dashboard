@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Example HTML</title>
+</head>
+<body>
+
+<p>
+    Hello World!
+</p>
+<script>
+
+    function doSomething() {
+        console.log("Something")
+    }
+
+    /**
+     * Wait for DOM to be loaded before trying to manipulate the placeholder.
+     */
+    if ( document.readyState === "complete" ||
+        (document.readyState !== "loading" && !document.documentElement.doScroll)) {
+        doSomething();
+    } else {
+        document.addEventListener("DOMContentLoaded", doSomething);
+    }
+</script>
+</body>
+</html>

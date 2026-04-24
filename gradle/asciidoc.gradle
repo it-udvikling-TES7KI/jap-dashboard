@@ -1,0 +1,46 @@
+// We need to generate the html for inclusion before the jar task is performed: jar.dependsOn asciidoctor
+// but it in order for it also to be build when executing the 'run' task it is hooked into the 'classes' task
+processResources.dependsOn asciidoctor
+
+//General Doc of AsciiDoc Gradle plugin
+//https://asciidoctor.github.io/asciidoctor-gradle-plugin/development-3.x
+
+asciidoctor {
+    resources {
+        from('src/docs/') {
+            include '**/*.html'
+            include '**/*.jpg'
+            include '**/*.png'
+            include '**/*.svg'
+            exclude '**/*.adoc'
+        }
+    }
+    outputDir = layout.buildDirectory.dir("resources").get().dir("./main/docs/")
+    asciidoctorj {
+        modules {
+            diagram.use()
+            diagram {
+                version '2.2.1'
+            }
+            //Fixes issue when jcenter() repo is not present
+            groovyDsl {
+                version '2.0.2'
+            }
+        }
+        attributes "sourcedir": "src/main/",
+            "source-highlighter": "coderay",
+            "asciidocDir": "src/docs/asciidoc",
+            "toc": "left",
+            "idprefix": "",
+            "idseparator": "-",
+            "icons": "font",
+            "setanchors": "",
+            "listing-caption": "",
+            "safe-mode-level": "0",
+            "project-version": "$project.version",
+            "revnumber": "$project.version",
+            "relfileprefix": "../docs" // Fixes issue with relative urls when published on the server
+
+        options doctype: "book", ruby: "erubis"
+    }
+}

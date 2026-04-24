@@ -1,0 +1,19 @@
+Thumbs.db
+.DS_Store
+**/build/
+!src/**/build/
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+target/
+out/
+.gradle
+.idea
+*.iml
+*.ipr
+*.iws
+.project
+.settings
+.classpath
+.factorypath
+.run
+.micronaut

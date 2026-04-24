@@ -1,0 +1,203 @@
+= Baseline projects
+
+Documentation may be written in danish or english. It should match the target audience of the project.
+
+We strive to use Java, Micronaut and Gradle as our main tools.
+
+Folder and file layout should follow the link:https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html[Maven project structure], which Gradle have adopted.
+
+Projects are hosted on Gitlab therefore implicitly Source Code Management(SCM) is done with Git.
+
+Artifacts are build and deployed by using the Gitlab build in Continuous Integrations(CI) tool.
+
+Documentation is written in Asciidoc and https://docs.asciidoctor.org/asciidoc/latest/[syntax and documentation]
+
+== Base project files and their function
+.Base layout of single project
+[source,text,linenums]
+----
++ ProjectRoot
+|   .editorconfig  <---------- Used to control encodings and line endings of src files
+|   .gitignore  <------------- Contains files and foldes that Git should not version control
+|   .gitlab-ci.yml  <--------- Config file for GitLab build system
+|   build.gradle  <----------- Gradle top level build file
+|   CHANGELOG.adoc  <--------- Manual maintained list of significant changes to the project
+|   CVE-suppressions.xml  <--- Used to suppress know CVE's that do not affect the project
+|   gradle.properties  <------ Contains Gradle specific properties ex. dependency versions
+|   gradlew  <---------------- Linux specific file for running Gradle wrapper
+|   gradlew.bat <------------- Windows specific file for running Gradle wrapper
+|   job.nomad  <-------------- Nomad deployment descriptor.
+|   README.adoc  <------------ A project specific README. Target audience; developers
+|   settings.gradle  <-------- Contains name and structure of project. Gradle specific file
+|
++---.idea  <------------------- Intellij project folder. Folder should not be included in SCM
+|   \                           Contains files and folders that tell Intellij how to behave.
+|
++---.gradle  <----------------- Gradle "work dir". Folder should not be included in SCM.
+|   \                           Can be deleted. Is recreated by Gradle
+|
++---.git  <-------------------- Git's folder. Do not delete and generally stay out.
+|   \
+|
++---gradle  <------------------ Gradle Wrapper folder and Gradle plugin specific files
+|   |   asciidoc.gradle  <----- Configures the Asciidoc Gradle plugin
+|   |   repositories.gradle <-- Custom dependency repository settings
+|   |   docker.gradle  <------- Configures and control the creation of the Docker image
+|   |   java.gradle  <--------- Settings related to compile Java src and jar creation
+|   |
+|   \---wrapper  <------------- Gradle Wrapper Bootstrap jar and config file
+|           gradle-wrapper.jar
+|           gradle-wrapper.properties <---- Contains path to where
+|                                           the Gradle wrapper downloads Gradle from
+|
+|
+\---info  <-------------------- Folder that can be used for docs and data files
+|   \                           specific for this project
+|
+\---src
+    +---docs
+    |   \---asciidoc
+    |           changelog.adoc <- Wrapper for the root folder Changelog
+    |           index.adoc <----- A project specific README. Target audience; End users.
+    |
+    +---main
+    |   +---java <--------------- Parent folder of Java kode
+    |   |
+    |   \---resources  <--------- Parent folder of files and folder to include in final jar
+    |       |   application.yml <---------- Micronaut config files. Contains project defaults
+    |       |   application-dev.yml  <----- Contains values specific for local dev env
+    |       |   application-staging.yml <-- Contains values specific for staging env
+    |       |   log4j2.xml <--------------- Config file for Log4j2
+    |       |
+    |       +---assets <------------------- Static www content required by the project
+    |       |       favicon.png
+    |       |
+    |       \---swagger-ui
+    |               index.html <----------- Static index files used by the Swagger-UI plugin
+    |
+    +---test
+    |   +---groovy <----------------------- Groovy(Spock) based unit test files
+    |   |
+    |   +---java <------------------------- Java(Junit5) based unit test files
+    |   |
+    |   \---resources  <------------------- Resources only used during test, not in final jar
+    |          application-test.yml
+    |          log4j2-test.xml
+----
+// Created with: tree /a /f
+
+=== link:.gitignore[.gitignore]
+Contains files and foldes that Git should not version control.
+[source,text]
+----
+include::.gitignore[]
+----
+
+=== link:.editorconfig[.editorconfig]
+Used to control encodings and line endings of src files. Many IDE'e can either interpret this directly or have plugins that can.
+[source,java]
+----
+include::.editorconfig[]
+----
+=== link:.gitlab-ci.yml[gitlab-ci.yml]
+ Config file for GitLab build system
+
+- Usage with baseline Docker build image
+- Pick up Test output and fail on test
+- Automatic and Manual deploy
+- limit build to specif branches
+
+- Deploy Nomad and different envs
+- Gitlab env vars substitution
+
+[source,yml]
+----
+include::.gitlab-ci.yml[]
+----
+
+=== link:build.gradle[build.gradle]
+The Gradle project uses a list of different plugins to ensure a better overall quality of the project.
+
+- Move versions to link:gradle.properties[gradle.properties]
+- Large plugin configurations should be moved to separate files and then included.
+
+A selection of HOWTO's and work notes on link:http://klogebog.jap.rsyd.net/[klogebog]
+[source,groovy]
+----
+include::build.gradle[]
+----
+
+==== link:gradle/java.gradle[java.gradle]
+[source,groovy]
+----
+include::gradle/java.gradle[]
+----
+
+==== link:gradle/docker.gradle[docker.gradle]
+[source,groovy]
+----
+include::gradle/docker.gradle[]
+----
+
+==== link:gradle/repositories.gradle[repositories.gradle]
+[source,groovy]
+----
+include::gradle/repositories.gradle[]
+----
+
+==== link:gradle/asciidoc.gradle[asciidoc.gradle]
+[source,groovy]
+----
+include::gradle/asciidoc.gradle[]
+----
+
+=== link:src/main/resources/log4j2.xml[log4j2.xml]
+Collection of link:http://jap.regis.rsyd.net/klogebog/JAP/Logging.html[logging work notes]
+[source,xml]
+....
+include::src/main/resources/log4j2.xml[]
+....
+
+=== link:job.nomad[job.nomad]
+Collection of link:http://jap.regis.rsyd.net/klogebog/JAP/Nomad.html[Nomad work notes]
+
+.Baseline Nomad deployment file
+[source,hcl]
+----
+include::job.nomad[]
+----
+<1> Whenever a new project is created a new set of credentials should be created in Gitlab `Settings->Repository->Deploy Tokens`
+
+== Development process
+Before work is started on a feature create a new branch and commit all related work on that branch. Either through Gitlab or locally.
+Changes are then pushed to Gitlab where a successful build can be deployed on our runtime platform.
+
+=== Git
+Small collection of link:http://klogebog.jar.rsyd.net/[Git work notes]
+
+Guide on how to write good link:http://klogebog.jar.rsyd.net/[Git Commit Messages]
+
+// TODO === IDEA Config
+
+== Release process
+The release process is done by using Git and Gradle plugins.
+
+We strive to adhere to a link:https://semver.org/[Semantic version schema]
+
+By using Git tag's the versioning of the projects artifacts is done automatically. A Gradle plugin populates the version form Git metadata and then updates the `$project.version` accordingly.
+This version number is also used by the Gradle Docker plugin to populate the Docker Image Version
+
+=== Changelog
+The base project will ensure that a changelog can be included in the project documentation when deployed.
+Format of the of changelog should adhere to the link:https://keepachangelog.com/[Keep a Changelog] format.
+
+More on how to work with the change log setup link:http://klogebog.jar.rsyd.net/[JAP Changelog]
+
+== TODO
+- Missing description of often used Gradle commands
+- Git daily commands and release commands
+
+=== Multiple Java Micronaut Gradle Projekt
+
+===  Mixed Java Micronaut Gradle og JavaScript project
+
