@@ -1,0 +1,44 @@
+.page {
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center; /* centers the container */
+}
+
+.container {
+    width: 70%;
+}
+
+.header {
+    margin-bottom: 20px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+}
+
+.card {
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    transition: transform 0.1s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+}
+
+.link {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+}
+
+.link:hover {
+    text-decoration: underline;
+}

@@ -1,5 +1,6 @@
 import {useQuery} from "@tanstack/react-query";
 import {fetchGitlabProjects} from "./ProjectsHook";
+import styles from "./Overview.module.css";
 
 export default function GitLabProjectOverview() {
 
@@ -15,18 +16,24 @@ export default function GitLabProjectOverview() {
 
     return (
         <div>
-            <h1>Project Dashboard</h1>
-            <div>
-                {gitLabProjects.map((project, index) => (
-                    <div key={index}>
-                        <a
-                            href={project.web_url}
-                            target="_blank"
-                        >
-                            {project.name}
-                        </a>
-                    </div>
-                ))}
+            <h1 className={styles.header}>Project Dashboard</h1>
+
+            <div className={styles.page}>
+
+                <div className={styles.grid}>
+                    {gitLabProjects.map((project, index) => (
+                        <div key={index} className={styles.card}>
+                            <a
+                                href={project.web_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={styles.link}
+                            >
+                                {project.name}
+                            </a>
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );
