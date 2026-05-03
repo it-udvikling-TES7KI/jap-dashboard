@@ -1,5 +1,5 @@
 import './App.css'
-import GitLabProjectOverview from "./pages/gitlab/Overview.tsx";
+import GitLabProjectOverview from "./pages/dashboard/Overview.tsx";
 
 function App() {
     return (
