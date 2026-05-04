@@ -11,8 +11,8 @@ public class GitlabService{
         this.gitlabApiClient = gitlabApiClient;
     }
 
-    public Flux<GitlabProject> getAllProjects() {
-        return gitlabApiClient.fetchProjectsWithHeaders(1)
+    public Flux<GitlabProject> getAllProjects(int perPage, int page) {
+        return gitlabApiClient.fetchProjectsWithHeaders(perPage, page)
             .flatMapMany(response -> Flux.fromIterable(response.body()));
     }
 

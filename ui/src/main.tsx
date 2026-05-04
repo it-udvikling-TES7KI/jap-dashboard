@@ -13,7 +13,7 @@ if (!rootElement.innerHTML) {
         <QueryClientProvider client={queryClient}>
             <StrictMode>
                 <App/>
-            </StrictMode>,
+            </StrictMode>
         </QueryClientProvider>
     )
 }

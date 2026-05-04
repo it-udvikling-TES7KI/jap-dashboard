@@ -18,7 +18,7 @@ import static io.micronaut.http.HttpHeaders.USER_AGENT;
 @Header(name = "PRIVATE-TOKEN", value = "${gitlab.access-token}")
 public interface GitlabClient {
 
-    @Get("/api/v4/groups/5026930/projects?include_subgroups=true&per_page=20&page={page}")
-    Mono<HttpResponse<List<GitlabProject>>> fetchProjectsWithHeaders(@QueryValue int page);
+    @Get("/api/v4/groups/5026930/projects?include_subgroups=true&per_page={perPage}&page={page}")
+    Mono<HttpResponse<List<GitlabProject>>> fetchProjectsWithHeaders(@QueryValue int perPage, @QueryValue int page);
 
 }

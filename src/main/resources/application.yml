@@ -153,8 +153,13 @@ logger:
 gitlab:
   access-token: ${GITLAB_ACCESS_TOKEN}
 ---
+nomad:
+  secret-id: ${NOMAD_SECRET_ID}
+---
 micronaut:
   http:
     services:
       gitlab:
         url: 'https://gitlab.com/'
+      nomad:
+        url: 'https://nomad.rsyd.net/'

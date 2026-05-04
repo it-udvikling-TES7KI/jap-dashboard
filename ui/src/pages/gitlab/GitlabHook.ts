@@ -1,6 +1,6 @@
 import {GitlabProject} from "./GitlabProject";
 
-const gitlabUrl = '/api/gitlab'
+const gitlabUrl = '/api/gitlab/'
 
 export async function fetchGitlabProjects() {
     const options = {
