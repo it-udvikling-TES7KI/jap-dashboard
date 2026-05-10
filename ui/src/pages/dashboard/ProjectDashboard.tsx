@@ -1,12 +1,14 @@
 import {useQuery} from "@tanstack/react-query";
-import {fetchGitlabProjects} from "../gitlab/GitlabHook.ts";
 import styles from "./ProjectDashboard.module.css";
 import gitlab_icon from "../../assets/gitlab_icon.svg";
+import question_mark from "../../assets/question_mark.svg";
+import harbor_icon from "../../assets/harbor_icon.svg";
 import {Link} from "react-router-dom";
+import {fetchProjectPreviews} from "../../hooks/ProjectHook.ts";
 
 export default function ProjectDashboard() {
 
-    const {isError, error, isPending, data: gitLabProjects} = useQuery({queryKey: ['gitlabProjects'], queryFn: fetchGitlabProjects})
+    const {isError, error, isPending, data: gitLabProjects} = useQuery({queryKey: ['projectPreviews'], queryFn: fetchProjectPreviews})
 
     if (isPending) {
         return <span>Loading...</span>
@@ -16,6 +18,21 @@ export default function ProjectDashboard() {
         return <span>Error: {error.message}</span>
     }
 
+    function getSeverityClass(severity: string) {
+        switch (severity?.toLowerCase()) {
+            case "critical":
+                return styles.severityCritical;
+            case "high":
+                return styles.severityHigh;
+            case "medium":
+                return styles.severityMedium;
+            case "low":
+                return styles.severityLow;
+            default:
+                return styles.severityDefault;
+        }
+    }
+
     return (
         <div>
             <h1 className={styles.header}>Project Dashboard</h1>
@@ -23,22 +40,47 @@ export default function ProjectDashboard() {
                 <div className={styles.grid}>
                     {gitLabProjects.map((project, index) => (
                         <div key={index}
-                             className={styles.card}>
+                             className={`${styles.card} ${getSeverityClass(project.artifactReport?.severity)}`}>
                             <Link
                                 className={styles.projectLink}
-                                to={`/project/${project.name}`}>
-                                <div className={styles.projectName}>{project.name}</div>
+                                to={`/project/${project.gitlabProject.name}`}>
+                                <div className={styles.projectName}>{project.gitlabProject.name}</div>
+
+                                {project.artifactReport?.severity ? (
+                                        <div>
+                                            {project.artifactReport?.severity ?? "Unknown"}
+                                        </div>) :
+
+                                    (
+                                        <div className={styles.unknownSeverity}>
+                                            <img src={question_mark} alt="Unknown Severity"/>
+                                        </div>)
+                                }
                             </Link>
                             <div className={styles.externalLinks}>
                                 <div className={styles.iconContainer}>
                                     <a
-                                        href={project.web_url}
+                                        href={project.gitlabProject.web_url}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className={styles.link}>
                                         <img src={gitlab_icon} alt="Gitlab Logo"/>
                                     </a>
                                 </div>
+
+                                {project.artifactReport?.harborLink && (
+                                    <div className={styles.iconContainer}>
+                                        <a
+                                            href={project.artifactReport?.harborLink}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className={styles.link}>
+                                            <img
+                                                src={harbor_icon}
+                                                alt="Harbor Logo"/>
+                                        </a>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     ))}

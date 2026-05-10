@@ -1,4 +1,4 @@
-import {GitlabProject} from "./GitlabProject";
+import {GitlabProject} from "../types/GitlabProject";
 
 const gitlabUrl = '/api/gitlab/'
 

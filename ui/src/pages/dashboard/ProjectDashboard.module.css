@@ -33,14 +33,27 @@
     overflow: hidden;
 }
 
+.severityCritical { background: #d32f2f; }
+.severityHigh { background: #f57c00; }
+.severityMedium { background: #fbc02d; }
+.severityLow { background: #388e3c; }
+
 .projectLink {
+    color: black;
     padding: 1rem;
     flex: 1;
     display: flex;
+    flex-direction: column;
     align-items: center;
     border: 1px solid #ddd;
     text-decoration: none;
+    gap: 1rem;
 }
+
+.unknownSeverity {
+    width: 40px;
+}
+
 
 .externalLinks{
     display: flex;

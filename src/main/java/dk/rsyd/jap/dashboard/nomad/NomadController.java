@@ -1,7 +1,5 @@
-package dk.rsyd.jap.dashboard.api;
+package dk.rsyd.jap.dashboard.nomad;
 
-import dk.rsyd.jap.dashboard.nomad.NomadJobDTO;
-import dk.rsyd.jap.dashboard.nomad.NomadService;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;

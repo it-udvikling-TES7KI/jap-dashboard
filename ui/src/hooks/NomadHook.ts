@@ -1,4 +1,4 @@
-import {NomadJob} from "./NomadJob";
+import {NomadJob} from "../types/NomadJob";
 
 export async function fetchNomadJobsByProjectName(name: string) {
 

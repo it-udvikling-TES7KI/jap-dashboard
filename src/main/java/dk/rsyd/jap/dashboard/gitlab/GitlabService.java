@@ -16,5 +16,9 @@ public class GitlabService{
             .flatMapMany(response -> Flux.fromIterable(response.body()));
     }
 
+    public Flux<Commit> getMasterCommits(int projectId){
+        return gitlabApiClient.fetchCommitsFromMasterBranch(projectId);
+    }
+
 
 }

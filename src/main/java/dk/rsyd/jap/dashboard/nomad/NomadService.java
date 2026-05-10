@@ -12,15 +12,15 @@ import java.net.URL;
 @Singleton
 public class NomadService {
 
-    private final NomadApiClient nomadApiClient;
+    private final NomadClient nomadClient;
 
 
-    public NomadService(NomadApiClient nomadApiClient) {
-        this.nomadApiClient = nomadApiClient;
+    public NomadService(NomadClient nomadClient) {
+        this.nomadClient = nomadClient;
     }
 
     public Flux<NomadJob> getAll() {
-        return nomadApiClient.fetchJapJobs().doOnNext(nomadJob -> {
+        return nomadClient.fetchJapJobs().doOnNext(nomadJob -> {
             nomadJob.setServiceLink(findWorkingLink(nomadJob));
         });
     }
@@ -29,7 +29,7 @@ public class NomadService {
 
         String filter = "\"" + projectName.toLowerCase() + "\" in Name";
 
-        return nomadApiClient.fetchJobsWithFilter(filter).doOnNext(nomadJob -> nomadJob.setServiceLink(findWorkingLink(nomadJob)));
+        return nomadClient.fetchJobsWithFilter(filter).doOnNext(nomadJob -> nomadJob.setServiceLink(findWorkingLink(nomadJob)));
 
     }
 

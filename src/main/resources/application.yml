@@ -156,6 +156,11 @@ gitlab:
 nomad:
   secret-id: ${NOMAD_SECRET_ID}
 ---
+harbor:
+  username: ${AD_USER}
+  password: ${AD_PASSWORD}
+  project: 'jap'
+---
 micronaut:
   http:
     services:
@@ -163,3 +168,5 @@ micronaut:
         url: 'https://gitlab.com/'
       nomad:
         url: 'https://nomad.rsyd.net/'
+      harbor:
+        url: 'https://harbor.rsyd.net/api/v2.0/'
