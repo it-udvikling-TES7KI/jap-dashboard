@@ -75,10 +75,10 @@ export default function ProjectDashboard() {
                                         <img src={gitlab_icon} alt="Gitlab Logo"/>
                                     </a>
                                 </div>
-                                {project.artifactReport?.harborLink && (
+                                {project.artifactReport?.repositoryLink && (
                                     <div className={styles.iconContainer}>
                                         <a
-                                            href={project.artifactReport?.harborLink}
+                                            href={project.artifactReport?.repositoryLink}
                                             target="_blank"
                                             rel="noopener noreferrer">
                                             <img

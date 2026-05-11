@@ -9,28 +9,10 @@ import java.util.Map;
 public class HarborClientDTOs {
 
     @Serdeable
-    public record VulnerabilityReportMap(Map<String, VulnerabilityReport> reports) {
-    }
-
-    @Serdeable
-    public record VulnerabilityReport(List<Vulnerability> vulnerabilities) {
-    }
-
-    @Serdeable
-    public record Vulnerability(
-        String id,
-        String severity,
-        @JsonProperty("package") String pkg,
-        String version,
-        @JsonProperty("fix_version") String fixVersion,
-        String description
-    ) {
-    }
-
-    @Serdeable
     public record Artifact(
         @JsonProperty("push_time") String pushTime,
         List<Tag> tags,
+        String digest,
         // Vi bruger et Map her, fordi nøglen under scan_overview ofte er en lang streng (mime-type)
         @JsonProperty("scan_overview") Map<String, ScanReport> scanOverview
     ) {
@@ -64,9 +46,4 @@ public class HarborClientDTOs {
     ) {
     }
 
-    @Serdeable
-    public record Repository(
-        String name // Harbor returnerer typisk navnet som "projektnavn/reponavn"
-    ) {
-    }
 }

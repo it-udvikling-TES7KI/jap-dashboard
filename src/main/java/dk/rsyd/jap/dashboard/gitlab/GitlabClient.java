@@ -19,6 +19,7 @@ public interface GitlabClient {
         "&archived=false")
     Flux<GitlabClientDTOs.GitlabProject> fetchProjects(@QueryValue int perPage, @QueryValue int page);
 
+    //todo fetch latest prod job instead of master branch
     @Header(name = ACCEPT, value = "application/json")
     @Get("/api/v4/projects/{projectId}/repository/commits?ref_name=master&per_page=5&page=1")
     Flux<Commit> fetchCommitsFromMasterBranch(@QueryValue int projectId);

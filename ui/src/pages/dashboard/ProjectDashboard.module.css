@@ -33,10 +33,10 @@
     overflow: hidden;
 }
 
-.severityCritical { background: #d32f2f; }
-.severityHigh { background: #f57c00; }
-.severityMedium { background: #fbc02d; }
-.severityLow { background: #388e3c; }
+.severityCritical { background: var(--vuln-critical); }
+.severityHigh { background: var(--vuln-high); }
+.severityMedium { background: var(--vuln-medium); }
+.severityLow { background: var(--vuln-low); }
 
 .projectLink {
     max-height: 140px;

@@ -8,4 +8,10 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
+
+    --vuln-low: #388e3c;
+    --vuln-medium: #fbc02d;
+    --vuln-high: #f57c00;
+    --vuln-critical: #d32f2f;
+    --vuln-fixable: #1976d2;
 }

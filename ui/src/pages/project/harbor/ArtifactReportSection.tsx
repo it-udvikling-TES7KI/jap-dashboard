@@ -1,11 +1,16 @@
 import {useQuery} from "@tanstack/react-query";
 import {fetchArtifactReportFromLatestMasterCommit} from "../../../hooks/HarborHook.ts";
+import VulnerabilityBar from "./VulnerabilityBar.tsx";
+import styles from "./ArtifactReportSection.module.css";
+import ProjectSection from "../ProjectSection.tsx";
+import harbor_icon from "../../../assets/harbor_icon.svg";
+
 
 export interface ArtifactReportSectionProps {
     projectName: string;
 }
 
-export function ArtifactReportSection({ projectName }: ArtifactReportSectionProps) {
+export function ArtifactReportSection({projectName}: ArtifactReportSectionProps) {
 
     const {isError, error, isPending, data: artifactReport} = useQuery({
         queryKey: ['artifactReport', projectName],
@@ -23,31 +28,33 @@ export function ArtifactReportSection({ projectName }: ArtifactReportSectionProp
         return <span>Error: {error.message}</span>
     }
 
-
+    //todo add link to gitlab commit / gitlab job that made the build
     return (
-        <section>
-            <h2>Harbor Section - {projectName}</h2>
+        <ProjectSection title={"Harbor Artifact Report from latest Master Commit"}>
             {artifactReport ? (
-                <div>
-                    <p>
-                        <strong>Harbor Link:</strong>{" "}
-                        <a href={artifactReport.harborLink} target="_blank" rel="noopener noreferrer">
-                            {artifactReport.harborLink}
-                        </a>
-                    </p>
-                    <p><strong>Commit:</strong> {artifactReport.commitShortId}</p>
-                    <p><strong>Severity:</strong> {artifactReport.severity}</p>
+                <div className={styles.container}>
+                    <a className={styles.commitInfo} href={artifactReport.artifactLink} target="_blank" rel="noopener noreferrer">
+                        <img
+                            src={harbor_icon}
+                            alt="Harbor Logo"/>
+                        <p><strong>Commit:</strong> {artifactReport.commitShortId}</p>
+                        <p><strong>Severity:</strong> {artifactReport.severity}</p>
+                    </a>
                     <ul>
                         <li>Critical: {artifactReport.critical}</li>
                         <li>High: {artifactReport.high}</li>
                         <li>Medium: {artifactReport.medium}</li>
                         <li>Low: {artifactReport.low}</li>
                         <li>Total: {artifactReport.total}</li>
+                        <li>Fixable: {artifactReport.fixable}</li>
                     </ul>
+                    <div className={styles.vulnerabilityBarContainer}>
+                        <VulnerabilityBar artifactReport={artifactReport}></VulnerabilityBar>
+                    </div>
                 </div>
             ) : (
                 <span>No artifact report found.</span>
             )}
-        </section>
+        </ProjectSection>
     )
 }

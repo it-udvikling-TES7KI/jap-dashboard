@@ -1,4 +1,4 @@
-import {ArtifactReport} from "../types/ProjectPreview";
+import {ArtifactReport} from "../types/ArtifactReport.d.ts";
 
 const harborUrl = '/api/harbor/';
 

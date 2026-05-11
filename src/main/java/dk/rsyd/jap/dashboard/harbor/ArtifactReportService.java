@@ -47,27 +47,12 @@ public class ArtifactReportService {
             return Mono.empty();
         }
 
-        // TODO: move to config?
-        String harborLink = "https://harbor.rsyd.net/harbor/projects/5/repositories/" + projectName.toLowerCase().replace(" ", "-");
-
         return harborClient.getArtifactFromReference(projectName.toLowerCase(), reference)
             .flatMap(harborArtifact ->
                 harborArtifact.scanOverview()
                     .values().stream().findFirst()
-                    .map(scanOverview -> {
-                        var scanSummary = scanOverview.summary();
-                        var vulnerabilityCounts = scanSummary.counts();
-                        return Mono.just(new ArtifactReport(
-                            harborLink,
-                            reference,
-                            scanOverview.severity(),
-                            vulnerabilityCounts.critical(),
-                            vulnerabilityCounts.high(),
-                            vulnerabilityCounts.medium(),
-                            vulnerabilityCounts.low(),
-                            scanSummary.total()
-                        ));
-                    })
+                    .map(scanReport -> Mono.just(
+                        ArtifactReport.of(projectName, reference, scanReport, harborArtifact.digest())))
                     .orElseGet(Mono::empty)
             )
             .onErrorResume(e -> {

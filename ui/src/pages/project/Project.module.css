@@ -6,3 +6,9 @@
     text-transform: capitalize;
 }
 
+.sections {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+

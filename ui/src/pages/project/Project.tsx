@@ -7,14 +7,16 @@ import {ArtifactReportSection} from "./harbor/ArtifactReportSection.tsx";
 export default function Project() {
 
     const {projectName} = useParams()
-    
+
     if (!projectName) return <div>No project data found.</div>;
 
     return (
         <div className={styles.container}>
             <h1 className={styles.projectName}>{projectName}</h1>
-            <NomadSection projectName={projectName}/>
-            <ArtifactReportSection projectName={projectName}/>
+            <div className={styles.sections}>
+                <ArtifactReportSection projectName={projectName}/>
+                <NomadSection projectName={projectName}/>
+            </div>
         </div>
     );
 }
