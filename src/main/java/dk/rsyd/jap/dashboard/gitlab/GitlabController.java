@@ -10,20 +10,20 @@ import reactor.core.publisher.Flux;
 @Controller("/api/gitlab")
 public class GitlabController {
 
-    private final GitlabService gitlabService;
+    private final GitlabClient gitlabClient;
 
-    public GitlabController(GitlabService gitlabService) {
-        this.gitlabService = gitlabService;
+    public GitlabController(GitlabClient gitlabClient) {
+        this.gitlabClient = gitlabClient;
     }
 
     @Get
     Flux<GitlabProject> getGitlabProjects(){
-        return gitlabService.getAllProjects(50, 1);
+        return gitlabClient.fetchProjects(50, 1);
     }
 
     @Get("/commitsFromMaster/{projectId}")
     Flux<Commit> getMasterCommits(int projectId){
-        return gitlabService.getMasterCommits(projectId);
+        return gitlabClient.fetchCommitsFromMasterBranch(projectId);
     }
 
 }

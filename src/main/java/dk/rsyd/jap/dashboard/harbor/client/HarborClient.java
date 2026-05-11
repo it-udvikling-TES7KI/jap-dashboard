@@ -28,10 +28,14 @@ public interface HarborClient {
     Flux<HarborClientDTOs.Artifact> getArtifactsFromProjectName(@QueryValue String projectName);
 
     @Get(
-        "projects/${harbor.project}/repositories/{projectName}/artifacts/{reference}"
-            + "?page=1"
-            + "&page_size=5"
-            + "&with_tag=true&with_label=true&with_scan_overview=true&with_sbom_overview=true&with_accessory=false&with_signature=false&with_immutable_status=false"
+        "projects/${harbor.project}/repositories/{projectName}/artifacts/{reference}" +
+            "?page=1" +
+            "&page_size=5" +
+            "&with_tag=true&with_label=true" +
+            "&with_scan_overview=true&with_sbom_overview=true" +
+            "&with_accessory=false" +
+            "&with_signature=false" +
+            "&with_immutable_status=false"
     )
     Mono<HarborClientDTOs.Artifact> getArtifactFromReference(@QueryValue String projectName, @QueryValue String reference);
 }
