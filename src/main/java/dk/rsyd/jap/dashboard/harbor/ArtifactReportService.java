@@ -3,7 +3,6 @@ package dk.rsyd.jap.dashboard.harbor;
 import dk.rsyd.jap.dashboard.gitlab.GitlabClient;
 import dk.rsyd.jap.dashboard.harbor.artifactReport.ArtifactReport;
 import dk.rsyd.jap.dashboard.harbor.client.HarborClient;
-import dk.rsyd.jap.dashboard.project.ProjectPreview;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import jakarta.inject.Singleton;
@@ -14,11 +13,9 @@ import reactor.core.publisher.Mono;
 @Singleton
 public class ArtifactReportService {
 
-
     private static final Logger LOG = LogManager.getLogger(ArtifactReportService.class);
     private final HarborClient harborClient;
     private final GitlabClient gitlabClient;
-
 
     public ArtifactReportService(HarborClient harborClient, GitlabClient gitlabClient) {
         this.harborClient = harborClient;

@@ -1,6 +1,7 @@
 package dk.rsyd.jap.dashboard.project;
 
 import dk.rsyd.jap.dashboard.gitlab.GitlabClient;
+import dk.rsyd.jap.dashboard.gitlab.GitlabProject;
 import dk.rsyd.jap.dashboard.harbor.ArtifactReportService;
 import jakarta.inject.Singleton;
 import org.apache.logging.log4j.LogManager;
@@ -9,6 +10,7 @@ import reactor.core.publisher.Flux;
 
 import java.util.Comparator;
 
+//todo logging
 @Singleton
 public class ProjectService {
 
@@ -24,6 +26,7 @@ public class ProjectService {
 
     public Flux<ProjectPreview> getProjectPreviews(int perPage, int page) {
     return gitlabClient.fetchProjects(perPage, page)
+        .map(GitlabProject::fromJapNameSpace)
         .flatMap(gitlabProject ->
             artifactReportService
                 .getArtifactReportFromLatestMasterCommit(gitlabProject.name())

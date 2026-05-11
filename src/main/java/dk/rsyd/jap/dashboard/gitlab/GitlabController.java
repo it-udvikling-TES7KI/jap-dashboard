@@ -17,7 +17,7 @@ public class GitlabController {
     }
 
     @Get
-    Flux<GitlabProject> getGitlabProjects(){
+    Flux<GitlabClientDTOs.GitlabProject> getGitlabProjects(){
         return gitlabClient.fetchProjects(50, 1);
     }
 

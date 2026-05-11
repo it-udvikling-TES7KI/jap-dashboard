@@ -14,8 +14,10 @@ import static io.micronaut.http.HttpHeaders.USER_AGENT;
 @Header(name = "PRIVATE-TOKEN", value = "${gitlab.access-token}")
 public interface GitlabClient {
 
-    @Get("/api/v4/groups/5026930/projects?include_subgroups=true&per_page={perPage}&page={page}")
-    Flux<GitlabProject> fetchProjects(@QueryValue int perPage, @QueryValue int page);
+    @Get("/api/v4/groups/6395180/projects?include_subgroups=true&per_page={perPage}&page={page}" +
+        "&order_by=path&sort=asc" +
+        "&archived=false")
+    Flux<GitlabClientDTOs.GitlabProject> fetchProjects(@QueryValue int perPage, @QueryValue int page);
 
     @Header(name = ACCEPT, value = "application/json")
     @Get("/api/v4/projects/{projectId}/repository/commits?ref_name=master&per_page=5&page=1")
@@ -23,6 +25,6 @@ public interface GitlabClient {
 
     @Header(name = ACCEPT, value = "application/json")
     @Get("/api/v4/groups/5026930/projects?include_subgroups=true&search={name}&simple=true")
-    Flux<GitlabProject> fetchProjectsFromName(@QueryValue String name);
+    Flux<GitlabClientDTOs.GitlabProject> fetchProjectsFromName(@QueryValue String name);
 
 }

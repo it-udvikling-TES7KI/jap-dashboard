@@ -7,6 +7,6 @@ export async function fetchProjectPreviews() {
         method: 'GET',
     }
 
-    const response = await fetch(`/api/project?page=1&perPage=25`, options)
+    const response = await fetch(`/api/project?page=1&perPage=24`, options)
     return await response.json() as ProjectPreview[];
 }

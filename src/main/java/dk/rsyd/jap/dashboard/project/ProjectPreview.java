@@ -9,6 +9,4 @@ public record ProjectPreview(
     GitlabProject gitlabProject,
     ArtifactReport artifactReport
 ) {
-
-
 }

@@ -44,8 +44,17 @@ export default function ProjectDashboard() {
                             <Link
                                 className={styles.projectLink}
                                 to={`/project/${project.gitlabProject.name}`}>
-                                <div className={styles.projectName}>{project.gitlabProject.name}</div>
 
+                                {project.gitlabProject.projectGroupPath ? (
+                                        <div className={styles.projectName}>
+                                            <div>{project.gitlabProject.projectGroupPath} </div>
+                                            <div>{project.gitlabProject.name}</div>
+                                        </div>
+                                    ) :
+                                    (
+                                        <div className={styles.projectName}> {project.gitlabProject.name}</div>
+                                    )
+                                }
                                 {project.artifactReport?.severity ? (
                                         <div>
                                             {project.artifactReport?.severity ?? "Unknown"}
@@ -60,21 +69,18 @@ export default function ProjectDashboard() {
                             <div className={styles.externalLinks}>
                                 <div className={styles.iconContainer}>
                                     <a
-                                        href={project.gitlabProject.web_url}
+                                        href={project.gitlabProject.gitlabLink}
                                         target="_blank"
-                                        rel="noopener noreferrer"
-                                        className={styles.link}>
+                                        rel="noopener noreferrer">
                                         <img src={gitlab_icon} alt="Gitlab Logo"/>
                                     </a>
                                 </div>
-
                                 {project.artifactReport?.harborLink && (
                                     <div className={styles.iconContainer}>
                                         <a
                                             href={project.artifactReport?.harborLink}
                                             target="_blank"
-                                            rel="noopener noreferrer"
-                                            className={styles.link}>
+                                            rel="noopener noreferrer">
                                             <img
                                                 src={harbor_icon}
                                                 alt="Harbor Logo"/>
