@@ -2,6 +2,7 @@ package dk.rsyd.jap.dashboard.project;
 
 import dk.rsyd.jap.dashboard.gitlab.GitlabClient;
 import dk.rsyd.jap.dashboard.gitlab.GitlabProject;
+import dk.rsyd.jap.dashboard.gitlab.GitlabService;
 import dk.rsyd.jap.dashboard.harbor.ArtifactReportService;
 import jakarta.inject.Singleton;
 import org.apache.logging.log4j.LogManager;
@@ -17,10 +18,12 @@ public class ProjectService {
     private static final Logger LOG = LogManager.getLogger(ProjectService.class);
 
     private final GitlabClient gitlabClient;
+    private final GitlabService gitlabService;
     private final ArtifactReportService artifactReportService;
 
-    public ProjectService(GitlabClient gitlabClient, ArtifactReportService artifactReportService) {
+    public ProjectService(GitlabClient gitlabClient, GitlabService gitlabService, ArtifactReportService artifactReportService) {
         this.gitlabClient = gitlabClient;
+        this.gitlabService = gitlabService;
         this.artifactReportService = artifactReportService;
     }
 

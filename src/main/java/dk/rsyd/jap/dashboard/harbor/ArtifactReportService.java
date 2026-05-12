@@ -1,6 +1,7 @@
 package dk.rsyd.jap.dashboard.harbor;
 
 import dk.rsyd.jap.dashboard.gitlab.GitlabClient;
+import dk.rsyd.jap.dashboard.gitlab.GitlabService;
 import dk.rsyd.jap.dashboard.harbor.artifactReport.ArtifactReport;
 import dk.rsyd.jap.dashboard.harbor.client.HarborClient;
 import io.micronaut.http.HttpStatus;
@@ -16,30 +17,24 @@ public class ArtifactReportService {
     private static final Logger LOG = LogManager.getLogger(ArtifactReportService.class);
     private final HarborClient harborClient;
     private final GitlabClient gitlabClient;
+    private final GitlabService gitlabService;
 
-    public ArtifactReportService(HarborClient harborClient, GitlabClient gitlabClient) {
+    public ArtifactReportService(HarborClient harborClient, GitlabClient gitlabClient, GitlabService gitlabService) {
         this.harborClient = harborClient;
         this.gitlabClient = gitlabClient;
+        this.gitlabService = gitlabService;
     }
 
     public Mono<ArtifactReport> getArtifactReportFromLatestMasterCommit(String projectName) {
+        //todo find a way to do get projectId directly
         var gitProjectsMatchingName = gitlabClient.fetchProjectsFromName(projectName);
 
         return gitProjectsMatchingName
             .doOnError(LOG::error)
             .next()
-            .flatMap(gitlabProject -> {
-                var gitId = gitlabProject.id();
-                return gitlabClient.fetchCommitsFromMasterBranch(gitId)
-                    .doOnError(LOG::error)
-                    .next()
-                    .flatMap(latestCommit -> {
-                        if (latestCommit == null || latestCommit.shortId() == null) {
-                            return Mono.empty();
-                        }
-                        return getArtifactReport(projectName, latestCommit.shortId());
-                    });
-            });
+            .flatMap(gitlabProject -> gitlabService.findCommitFromLatestProdDeploy(gitlabProject.id())
+                .flatMap(commit -> getArtifactReport(projectName, commit.shortId()))
+                .doOnError(LOG::error));
     }
 
     public Mono<ArtifactReport> getArtifactReport(String projectName, String reference) {
