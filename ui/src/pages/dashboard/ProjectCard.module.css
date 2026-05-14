@@ -1,0 +1,58 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 175px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.severityCritical { background: var(--vuln-critical); }
+.severityHigh { background: var(--vuln-high); }
+.severityMedium { background: var(--vuln-medium); }
+.severityLow { background: var(--vuln-low); }
+
+.projectLink {
+    max-height: 140px;
+    color: black;
+    padding: 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid #ddd;
+    text-decoration: none;
+    gap: 1rem;
+    overflow: hidden;
+}
+
+.unknownSeverity {
+    width: 40px;
+}
+
+
+.externalLinks{
+    display: flex;
+    background: #dddddd;
+    gap: 5px;
+    padding: 5px;
+}
+
+.iconContainer {
+    width: 25px;
+    height: 25px;
+}
+
+.projectName {
+    align-self: flex-start;
+    text-transform: capitalize;
+    color: black;
+    font-weight: bold;
+}
+
+
+.card:hover {
+    transform: translateY(-3px);
+}

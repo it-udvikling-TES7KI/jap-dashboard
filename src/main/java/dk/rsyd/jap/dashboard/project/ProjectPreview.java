@@ -7,6 +7,7 @@ import io.micronaut.serde.annotation.Serdeable;
 @Serdeable
 public record ProjectPreview(
     GitlabProject gitlabProject,
-    ArtifactReport artifactReport
+    ArtifactReport latestMasterCommitReport,
+    ArtifactReport latestProdDeployReport
 ) {
 }

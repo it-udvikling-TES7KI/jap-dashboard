@@ -21,6 +21,10 @@ public interface GitlabClient {
     Flux<GitlabClientDTOs.GitlabProject> fetchProjects(@QueryValue int perPage, @QueryValue int page);
 
     @Header(name = ACCEPT, value = "application/json")
+    @Get("/api/v4/projects/{projectId}/repository/commits?ref_name=master&per_page=5&page=1")
+    Flux<GitlabClientDTOs.Commit> fetchCommitsFromMasterBranch(@QueryValue int projectId);
+
+    @Header(name = ACCEPT, value = "application/json")
     @Get("/api/v4/groups/5026930/projects?include_subgroups=true&search={name}&simple=true")
     Flux<GitlabClientDTOs.GitlabProject> fetchProjectsFromName(@QueryValue String name);
 

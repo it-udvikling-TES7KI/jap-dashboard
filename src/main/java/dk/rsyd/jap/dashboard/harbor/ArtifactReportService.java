@@ -1,6 +1,6 @@
 package dk.rsyd.jap.dashboard.harbor;
 
-import dk.rsyd.jap.dashboard.gitlab.GitlabClient;
+import dk.rsyd.jap.dashboard.gitlab.GitlabClientDTOs;
 import dk.rsyd.jap.dashboard.gitlab.GitlabService;
 import dk.rsyd.jap.dashboard.harbor.artifactReport.ArtifactReport;
 import dk.rsyd.jap.dashboard.harbor.client.HarborClient;
@@ -16,38 +16,51 @@ public class ArtifactReportService {
 
     private static final Logger LOG = LogManager.getLogger(ArtifactReportService.class);
     private final HarborClient harborClient;
-    private final GitlabClient gitlabClient;
     private final GitlabService gitlabService;
 
-    public ArtifactReportService(HarborClient harborClient, GitlabClient gitlabClient, GitlabService gitlabService) {
+    public ArtifactReportService(HarborClient harborClient, GitlabService gitlabService) {
         this.harborClient = harborClient;
-        this.gitlabClient = gitlabClient;
         this.gitlabService = gitlabService;
     }
 
     public Mono<ArtifactReport> getArtifactReportFromLatestMasterCommit(String projectName) {
         //todo find a way to do get projectId directly
-        var gitProjectsMatchingName = gitlabClient.fetchProjectsFromName(projectName);
-
-        return gitProjectsMatchingName
-            .doOnError(LOG::error)
-            .next()
-            .flatMap(gitlabProject -> gitlabService.findCommitFromLatestProdDeploy(gitlabProject.id())
-                .flatMap(commit -> getArtifactReport(projectName, commit.shortId()))
-                .doOnError(LOG::error));
+         return gitlabService.findProjectFromName(projectName)
+            .flatMap(gitlabProject -> {
+                var gitId = gitlabProject.id();
+                return gitlabService.fetchCommitFromMasterBranch(gitId)
+                    .flatMap(latestCommit -> {
+                        if (latestCommit.shortId() == null) {
+                            return Mono.empty();
+                        }
+                        return getArtifactReport(projectName, latestCommit);
+                    });
+            });
     }
 
-    public Mono<ArtifactReport> getArtifactReport(String projectName, String reference) {
-        if (reference == null) {
+    public Mono<ArtifactReport> getArtifactReportFromLatestProdDeploy(String projectName) {
+        //todo find a way to do get projectId directly
+
+        return gitlabService.findProjectFromName(projectName)
+            .flatMap(gitlabProject ->
+                gitlabService.findCommitFromLatestProdDeploy(gitlabProject.id())
+                    .flatMap(commit ->
+                        getArtifactReport(projectName, commit))
+            )
+            .doOnError(LOG::error);
+    }
+
+    public Mono<ArtifactReport> getArtifactReport(String projectName, GitlabClientDTOs.Commit commit) {
+        if (commit == null) {
             return Mono.empty();
         }
 
-        return harborClient.getArtifactFromReference(projectName.toLowerCase(), reference)
+        return harborClient.getArtifactFromReference(projectName.toLowerCase(), commit.shortId())
             .flatMap(harborArtifact ->
                 harborArtifact.scanOverview()
                     .values().stream().findFirst()
                     .map(scanReport -> Mono.just(
-                        ArtifactReport.of(projectName, reference, scanReport, harborArtifact.digest())))
+                        ArtifactReport.of(projectName, commit, scanReport, harborArtifact.digest())))
                     .orElseGet(Mono::empty)
             )
             .onErrorResume(e -> {

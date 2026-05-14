@@ -8,8 +8,11 @@ import jakarta.inject.Singleton;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import java.util.Comparator;
+import java.util.Optional;
 
 //todo logging
 @Singleton
@@ -28,14 +31,25 @@ public class ProjectService {
     }
 
     public Flux<ProjectPreview> getProjectPreviews(int perPage, int page) {
-    return gitlabClient.fetchProjects(perPage, page)
-        .map(GitlabProject::fromJapNameSpace)
-        .flatMap(gitlabProject ->
-            artifactReportService
-                .getArtifactReportFromLatestMasterCommit(gitlabProject.name())
-                .map(artifactReport -> new ProjectPreview(gitlabProject, artifactReport))
-                .defaultIfEmpty(new ProjectPreview(gitlabProject, null))
-        )
-        .sort(Comparator.comparing(preview -> preview.gitlabProject().name()));
-}
+        return gitlabClient.fetchProjects(perPage, page)
+            .map(GitlabProject::fromJapNameSpace)
+            .flatMap(gitlabProject -> {
+                var latestProdDeploy = artifactReportService
+                    .getArtifactReportFromLatestProdDeploy(gitlabProject.name())
+                    .subscribeOn(Schedulers.boundedElastic())
+                    .singleOptional();
+
+                var latestMasterCommit = artifactReportService
+                    .getArtifactReportFromLatestMasterCommit(gitlabProject.name())
+                    .subscribeOn(Schedulers.boundedElastic())
+                    .singleOptional();
+
+                return Mono.zip(
+                    latestProdDeploy,
+                    latestMasterCommit,
+                    (prodDeploy, masterCommit) -> new ProjectPreview(gitlabProject, masterCommit.orElse(null), prodDeploy.orElse(null))
+                );
+            })
+            .sort(Comparator.comparing(preview -> preview.gitlabProject().name()));
+    }
 }

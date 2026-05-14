@@ -35,7 +35,7 @@ public class HarborController {
     Mono<ArtifactReport> getArtifactReportFromLatestMasterCommit(HttpRequest<?> httpRequest, @PathVariable String projectName){
         LOG.info("method={}, endpoint={}", httpRequest.getMethod(), httpRequest.getUri());
 
-        return artifactReportService.getArtifactReportFromLatestMasterCommit(projectName);
+        return artifactReportService.getArtifactReportFromLatestProdDeploy(projectName);
     }
 
     //todo not in use
@@ -48,9 +48,9 @@ public class HarborController {
 
     //todo not in use
     @Get("/artifacts")
-    Flux<HarborClientDTOs.Artifact> getHarborArtifactFromReference(HttpRequest<?> httpRequest, @QueryValue String projectName, @QueryValue String reference){
+    Mono<HarborClientDTOs.Artifact> getHarborArtifactFromReference(HttpRequest<?> httpRequest, @QueryValue String projectName, @QueryValue String reference){
         LOG.info("method={}, endpoint={}", httpRequest.getMethod(), httpRequest.getUri());
 
-        return harborClient.getArtifactFromReference(projectName, reference).flux();
+        return harborClient.getArtifactFromReference(projectName, reference);
     }
 }
