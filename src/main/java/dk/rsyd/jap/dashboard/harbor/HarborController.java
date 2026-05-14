@@ -35,6 +35,13 @@ public class HarborController {
     Mono<ArtifactReport> getArtifactReportFromLatestMasterCommit(HttpRequest<?> httpRequest, @PathVariable String projectName){
         LOG.info("method={}, endpoint={}", httpRequest.getMethod(), httpRequest.getUri());
 
+        return artifactReportService.getArtifactReportFromLatestMasterCommit(projectName);
+    }
+
+    @Get("/project/{projectName}/artifactReport/latestProdDeploy")
+    Mono<ArtifactReport> getArtifactReportFromLatestProdDeploy(HttpRequest<?> httpRequest, @PathVariable String projectName) {
+        LOG.info("method={}, endpoint={}", httpRequest.getMethod(), httpRequest.getUri());
+
         return artifactReportService.getArtifactReportFromLatestProdDeploy(projectName);
     }
 

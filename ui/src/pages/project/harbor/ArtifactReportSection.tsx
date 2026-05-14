@@ -23,7 +23,7 @@ export function ArtifactReportSection({projectName}: ArtifactReportSectionProps)
     if (artifactReport) {
         //todo add link to gitlab commit / gitlab job that made the build
         return (
-            <ProjectSection title={"Harbor Artifact Report from latest Prod deploy"}>
+            <ProjectSection title={"Harbor Artifact Report from latest commit to Master"}>
                 {artifactReport ? (
                     <div className={styles.container}>
                         <a className={styles.commitInfo} href={artifactReport.artifactLink} target="_blank" rel="noopener noreferrer">
