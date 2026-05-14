@@ -23,7 +23,8 @@ public class GitlabService {
 
     public Mono<GitlabClientDTOs.GitlabProject> findProjectFromName(String projectName){
         return gitlabClient.fetchProjectsFromName(projectName)
-            .filter(gitlabProject -> gitlabProject.name().equals(projectName))
+            .filter(gitlabProject ->
+                gitlabProject.name().equalsIgnoreCase(projectName))
             .next();
 
     }
