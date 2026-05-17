@@ -4,6 +4,7 @@ import VulnerabilityBar from "./VulnerabilityBar.tsx";
 import styles from "./ArtifactReportSection.module.css";
 import ProjectSection from "../ProjectSection.tsx";
 import harbor_icon from "../../../assets/harbor_icon.svg";
+import gitlab_icon from "../../../assets/gitlab_icon.svg";
 import {useState} from "react";
 import {ArtifactReportFocus, getArtifactReportLabel} from "../../../types/ArtifactReportFocus.ts";
 import {ArtifactReportNavbar} from "../../../components/ArtifactReportNavbar.tsx";
@@ -56,12 +57,33 @@ export function ArtifactReportSection({projectName}: ArtifactReportSectionProps)
             <ProjectSection title={getSectionTitle()}>
                 {focusedArtifactReport ? (
                         <div className={styles.container}>
-                            <a className={styles.commitInfo} href={focusedArtifactReport.artifactLink} target="_blank" rel="noopener noreferrer">
-                                <img
-                                    src={harbor_icon}
-                                    alt="Harbor Logo"/>
-                                <p><strong>Commit:</strong> {focusedArtifactReport.commitShortId}</p>
-                                <p><strong>Severity:</strong> {focusedArtifactReport.severity}</p>
+                            <a className={styles.reportInfo}
+                               href={focusedArtifactReport.commitLink}
+                               target="_blank"
+                               rel="noopener noreferrer">
+                                <div className={styles.iconContainer}>
+                                    <img
+                                        src={gitlab_icon}
+                                        alt="Gitlab Logo"/>
+                                </div>
+                                <p>
+                                    <strong>Commit: </strong>
+                                    {focusedArtifactReport.commitShortId}
+                                </p>
+                            </a>
+                            <a className={styles.reportInfo}
+                               href={focusedArtifactReport.artifactLink}
+                               target="_blank"
+                               rel="noopener noreferrer">
+                                <div className={styles.iconContainer}>
+                                    <img
+                                        src={harbor_icon}
+                                        alt="Harbor Logo"/>
+                                </div>
+                                <p>
+                                    <strong>Severity: </strong>
+                                    {focusedArtifactReport.severity}
+                                </p>
                             </a>
                             <ul>
                                 <li>Critical: {focusedArtifactReport.critical}</li>
