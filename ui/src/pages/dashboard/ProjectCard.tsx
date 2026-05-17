@@ -4,28 +4,27 @@ import {Link} from "react-router-dom";
 import question_mark from "../../assets/question_mark.svg";
 import gitlab_icon from "../../assets/gitlab_icon.svg";
 import harbor_icon from "../../assets/harbor_icon.svg";
-import {FocusedArtifactReport} from "./FocusedArtifactReport.tsx";
+import {ArtifactReportFocus} from "../../types/ArtifactReportFocus.ts";
 
 export interface ProjectCardProps {
     project: ProjectPreview;
-    focusedArtifactReport: FocusedArtifactReport;
+    focusedArtifactReport: ArtifactReportFocus;
 }
 
 export default function ProjectCard({project, focusedArtifactReport}: ProjectCardProps) {
 
-   const focusedSeverity = determineFocusedSeverity();
+    const focusedSeverity = determineFocusedSeverity();
 
-   function determineFocusedSeverity() {
-       switch (focusedArtifactReport) {
-           case FocusedArtifactReport.LatestMasterCommit:
-               return project.latestMasterCommitReport?.severity;
-           case FocusedArtifactReport.LatestProdDeploy:
-               return project.latestProdDeployReport?.severity;
-           default:
-               return undefined;
-       }
-   }
-
+    function determineFocusedSeverity() {
+        switch (focusedArtifactReport) {
+            case ArtifactReportFocus.LatestMasterCommit:
+                return project.latestMasterCommitReport?.severity;
+            case ArtifactReportFocus.LatestProdDeploy:
+                return project.latestProdDeployReport?.severity;
+            default:
+                return undefined;
+        }
+    }
 
     function getSeverityClass(severity: string) {
         switch (severity?.toLowerCase()) {
