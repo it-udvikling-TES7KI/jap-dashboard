@@ -14,14 +14,16 @@ public class GitlabService {
         this.gitlabClient = gitlabClient;
     }
 
-    public Mono<GitlabClientDTOs.Commit> findCommitFromLatestProdDeploy(int projectId){
+    public Mono<GitlabClientDTOs.Commit> findCommitFromLatestProdDeploy(int projectId) {
         return gitlabClient.fetchSuccessfulJobsFromProject(projectId)
-            .filter(job -> Objects.equals(job.name(), "deploy-prod"))
+            .filter(job ->
+                (Objects.equals(job.name(), "deploy-prod"))
+                    || (Objects.equals(job.name(), "deploy-production")))
             .next()
             .map(GitlabClientDTOs.Job::commit);
     }
 
-    public Mono<GitlabClientDTOs.GitlabProject> findProjectFromName(String projectName){
+    public Mono<GitlabClientDTOs.GitlabProject> findProjectFromName(String projectName) {
         return gitlabClient.fetchProjectsFromName(projectName)
             .filter(gitlabProject ->
                 gitlabProject.name().equalsIgnoreCase(projectName))
@@ -31,6 +33,7 @@ public class GitlabService {
 
     /**
      * Checks both Master and Main as reference.
+     *
      * @param gitId
      * @return
      */

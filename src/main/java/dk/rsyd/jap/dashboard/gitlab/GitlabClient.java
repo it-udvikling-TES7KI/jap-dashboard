@@ -10,6 +10,7 @@ import static io.micronaut.http.HttpHeaders.ACCEPT;
 import static io.micronaut.http.HttpHeaders.USER_AGENT;
 
 //Todo caching
+//Todo make protected and limit access to go through Service
 @Client(id = "gitlab")
 @Header(name = USER_AGENT, value = "Micronaut HTTP Client")
 @Header(name = "PRIVATE-TOKEN", value = "${gitlab.access-token}")

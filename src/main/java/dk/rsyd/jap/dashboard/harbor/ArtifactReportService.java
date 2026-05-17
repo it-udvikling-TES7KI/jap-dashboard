@@ -25,7 +25,7 @@ public class ArtifactReportService {
 
     public Mono<ArtifactReport> getArtifactReportFromLatestMasterCommit(String projectName) {
         //todo find a way to do get projectId directly
-         return gitlabService.findProjectFromName(projectName)
+        return gitlabService.findProjectFromName(projectName)
             .flatMap(gitlabProject -> {
                 var gitId = gitlabProject.id();
                 return gitlabService.fetchCommitFromPrimaryBranch(gitId)
@@ -45,9 +45,12 @@ public class ArtifactReportService {
             .flatMap(gitlabProject ->
                 gitlabService.findCommitFromLatestProdDeploy(gitlabProject.id())
                     .flatMap(commit ->
-                        getArtifactReport(projectName, commit))
-            )
-            .doOnError(LOG::error);
+                        getArtifactReport(projectName, commit)
+                            .defaultIfEmpty(
+                                ArtifactReport.WithNoArtifactInfo(projectName, commit)
+                            )
+                    )
+                    .doOnError(LOG::error));
     }
 
     public Mono<ArtifactReport> getArtifactReport(String projectName, GitlabClientDTOs.Commit commit) {

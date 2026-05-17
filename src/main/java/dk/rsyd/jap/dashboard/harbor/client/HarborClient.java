@@ -9,6 +9,8 @@ import reactor.core.publisher.Mono;
 
 import static io.micronaut.http.HttpHeaders.USER_AGENT;
 
+//Todo caching
+//Todo make protected and limit access to go through Service
 @BasicAuth
 @Client(id = "harbor")
 @Header(name = USER_AGENT, value = "Micronaut HTTP Client")

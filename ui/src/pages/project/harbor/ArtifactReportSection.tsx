@@ -57,46 +57,54 @@ export function ArtifactReportSection({projectName}: ArtifactReportSectionProps)
             <ProjectSection title={getSectionTitle()}>
                 {focusedArtifactReport ? (
                         <div className={styles.container}>
-                            <a className={styles.reportInfo}
-                               href={focusedArtifactReport.commitLink}
-                               target="_blank"
-                               rel="noopener noreferrer">
-                                <div className={styles.iconContainer}>
-                                    <img
-                                        src={gitlab_icon}
-                                        alt="Gitlab Logo"/>
-                                </div>
-                                <p>
-                                    <strong>Commit: </strong>
-                                    {focusedArtifactReport.commitShortId}
-                                </p>
-                            </a>
-                            <a className={styles.reportInfo}
-                               href={focusedArtifactReport.artifactLink}
-                               target="_blank"
-                               rel="noopener noreferrer">
-                                <div className={styles.iconContainer}>
-                                    <img
-                                        src={harbor_icon}
-                                        alt="Harbor Logo"/>
-                                </div>
-                                <p>
-                                    <strong>Severity: </strong>
-                                    {focusedArtifactReport.severity}
-                                </p>
-                            </a>
-                            <ul>
-                                <li>Critical: {focusedArtifactReport.critical}</li>
-                                <li>High: {focusedArtifactReport.high}</li>
-                                <li>Medium: {focusedArtifactReport.medium}</li>
-                                <li>Low: {focusedArtifactReport.low}</li>
-                                <li>Total: {focusedArtifactReport.total}</li>
-                                <li>Fixable: {focusedArtifactReport.fixable}</li>
-                            </ul>
-                            <div className={styles.vulnerabilityBarContainer}>
-                                <VulnerabilityBar artifactReport={focusedArtifactReport}></VulnerabilityBar>
+                            <div className={styles.gitDetails}>
+                                <a className={styles.reportInfo}
+                                   href={focusedArtifactReport.commitLink}
+                                   target="_blank"
+                                   rel="noopener noreferrer">
+                                    <div className={styles.iconContainer}>
+                                        <img
+                                            src={gitlab_icon}
+                                            alt="Gitlab Logo"/>
+                                    </div>
+                                    <p>
+                                        <strong>Commit: </strong>
+                                        {focusedArtifactReport.commitShortId}
+                                    </p>
+                                </a>
                             </div>
+                            {focusedArtifactReport.severity ? (
+                                    <div className={styles.artifactDetails}>
+                                        <a className={styles.reportInfo}
+                                           href={focusedArtifactReport.artifactLink}
+                                           target="_blank"
+                                           rel="noopener noreferrer">
+                                            <div className={styles.iconContainer}>
+                                                <img
+                                                    src={harbor_icon}
+                                                    alt="Harbor Logo"/>
+                                            </div>
+                                            <p>
+                                                <strong>Severity: </strong>
+                                                {focusedArtifactReport.severity}
+                                            </p>
+                                        </a>
+                                        <ul>
+                                            <li>Critical: {focusedArtifactReport.critical}</li>
+                                            <li>High: {focusedArtifactReport.high}</li>
+                                            <li>Medium: {focusedArtifactReport.medium}</li>
+                                            <li>Low: {focusedArtifactReport.low}</li>
+                                            <li>Total: {focusedArtifactReport.total}</li>
+                                            <li>Fixable: {focusedArtifactReport.fixable}</li>
+                                        </ul>
+                                        <div className={styles.vulnerabilityBarContainer}>
+                                            <VulnerabilityBar artifactReport={focusedArtifactReport}></VulnerabilityBar>
+                                        </div>
+                                    </div>
+                                ) :
+                                (<div> No Report found </div>)}
                         </div>
+
                     ) :
                     <div>Report not found</div>
                 }
