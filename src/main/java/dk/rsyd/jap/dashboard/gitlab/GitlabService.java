@@ -29,8 +29,14 @@ public class GitlabService {
 
     }
 
-    public Mono<GitlabClientDTOs.Commit> fetchCommitFromMasterBranch(int gitId) {
+    /**
+     * Checks both Master and Main as reference.
+     * @param gitId
+     * @return
+     */
+    public Mono<GitlabClientDTOs.Commit> fetchCommitFromPrimaryBranch(int gitId) {
         return gitlabClient.fetchCommitsFromMasterBranch(gitId)
+            .switchIfEmpty(gitlabClient.fetchCommitsFromMainBranch(gitId))
             .next();
     }
 }

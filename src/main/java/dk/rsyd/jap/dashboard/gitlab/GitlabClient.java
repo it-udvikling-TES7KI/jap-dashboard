@@ -16,13 +16,18 @@ import static io.micronaut.http.HttpHeaders.USER_AGENT;
 public interface GitlabClient {
 
     @Get("/api/v4/groups/6395180/projects?include_subgroups=true&per_page={perPage}&page={page}" +
-        "&order_by=path&sort=asc" +
+    //    "&order_by=path&sort=asc" +
+        "&order_by=updated_at" +
         "&archived=false")
     Flux<GitlabClientDTOs.GitlabProject> fetchProjects(@QueryValue int perPage, @QueryValue int page);
 
     @Header(name = ACCEPT, value = "application/json")
     @Get("/api/v4/projects/{projectId}/repository/commits?ref_name=master&per_page=5&page=1")
     Flux<GitlabClientDTOs.Commit> fetchCommitsFromMasterBranch(@QueryValue int projectId);
+
+    @Header(name = ACCEPT, value = "application/json")
+    @Get("/api/v4/projects/{projectId}/repository/commits?ref_name=main&per_page=5&page=1")
+    Flux<GitlabClientDTOs.Commit> fetchCommitsFromMainBranch(@QueryValue int projectId);
 
     @Header(name = ACCEPT, value = "application/json")
     @Get("/api/v4/groups/5026930/projects?include_subgroups=true&search={name}&simple=true")

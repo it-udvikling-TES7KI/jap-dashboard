@@ -28,7 +28,7 @@ public class ArtifactReportService {
          return gitlabService.findProjectFromName(projectName)
             .flatMap(gitlabProject -> {
                 var gitId = gitlabProject.id();
-                return gitlabService.fetchCommitFromMasterBranch(gitId)
+                return gitlabService.fetchCommitFromPrimaryBranch(gitId)
                     .flatMap(latestCommit -> {
                         if (latestCommit.shortId() == null) {
                             return Mono.empty();
