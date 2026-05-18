@@ -9,9 +9,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
-
-import java.util.Comparator;
 
 //todo logging
 @Singleton
@@ -32,15 +29,13 @@ public class ProjectService {
     public Flux<ProjectPreview> getProjectPreviews(int perPage, int page) {
         return gitlabClient.fetchProjects(perPage, page)
             .map(GitlabProject::fromJapNameSpace)
-            .flatMap(gitlabProject -> {
+            .flatMapSequential(gitlabProject -> {
                 var latestProdDeploy = artifactReportService
                     .getArtifactReportFromLatestProdDeploy(gitlabProject.name())
-                    .subscribeOn(Schedulers.boundedElastic())
                     .singleOptional();
 
                 var latestMasterCommit = artifactReportService
                     .getArtifactReportFromLatestMasterCommit(gitlabProject.name())
-                    .subscribeOn(Schedulers.boundedElastic())
                     .singleOptional();
 
                 return Mono.zip(
@@ -48,7 +43,6 @@ public class ProjectService {
                     latestMasterCommit,
                     (prodDeploy, masterCommit) -> new ProjectPreview(gitlabProject, masterCommit.orElse(null), prodDeploy.orElse(null))
                 );
-            })
-            .sort(Comparator.comparing(preview -> preview.gitlabProject().name()));
+            });
     }
 }

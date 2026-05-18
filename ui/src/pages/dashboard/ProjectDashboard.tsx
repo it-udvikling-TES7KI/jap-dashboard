@@ -1,4 +1,4 @@
-import {useQuery} from "@tanstack/react-query";
+import {useInfiniteQuery} from "@tanstack/react-query";
 import styles from "./ProjectDashboard.module.css";
 import {fetchProjectPreviews} from "../../hooks/ProjectHook.ts";
 import ProjectCard from "./ProjectCard.tsx";
@@ -8,15 +8,46 @@ import {ArtifactReportFocus} from "../../types/ArtifactReportFocus.ts";
 
 export default function ProjectDashboard() {
     const [activeTab, setActiveTab] = useState(ArtifactReportFocus.LatestMasterCommit);
-    const {isError, error, isPending, data: gitLabProjects} = useQuery({queryKey: ['projectPreviews'], queryFn: fetchProjectPreviews})
+    const {
+        data,
+        error,
+        fetchNextPage,
+        hasNextPage,
+        isFetching,
+        isFetchingNextPage,
+    } =
+        useInfiniteQuery({
+            queryKey: ['projectPreviews'],
+            queryFn: fetchProjectPreviews,
+            initialPageParam: 1,
+            getNextPageParam: (lastPage, _allPages, lastPageParam) => {
+                if (lastPage.length === 0) {
+                    return undefined
+                }
+                return lastPageParam + 1
+            },
+            getPreviousPageParam: (_firstPage, _allPages, firstPageParam) => {
+                if (firstPageParam <= 1) {
+                    return undefined
+                }
+                return firstPageParam - 1
+            },
+        })
 
-    if (isPending) {
-        return <span>Loading...</span>
+    function getLoadButtonLabel() {
+        if (error != null) return 'Failed to load projects'
+        if (isFetchingNextPage) return 'Loading more...'
+        if (isFetching) return 'Fetching...'
+        if (!hasNextPage) return 'Nothing more to load'
+        return 'Load more'
     }
 
-    if (isError) {
-        return <span>Error: {error.message}</span>
-    }
+    const isLoadButtonDisabled =
+        error != null ||
+        isFetchingNextPage ||
+        isFetching ||
+        !hasNextPage
+
 
     return (
         <div>
@@ -24,9 +55,22 @@ export default function ProjectDashboard() {
             <ArtifactReportNavbar activeTab={activeTab} setActiveTab={setActiveTab}></ArtifactReportNavbar>
             <div className={styles.page}>
                 <div className={styles.grid}>
-                    {gitLabProjects.map((project, index) => (
-                        <ProjectCard project={project} focusedArtifactReport={activeTab} key={index}/>
-                    ))}
+                    {data?.pages.flatMap((group) =>
+                        group.map((project, index) => (
+                            <ProjectCard
+                                key={index}
+                                project={project}
+                                focusedArtifactReport={activeTab}
+                            />
+                        ))
+                    )}
+                </div>
+                <div className={styles.loadMoreSection}>
+                    <button
+                        onClick={() => fetchNextPage()}
+                        disabled={isLoadButtonDisabled}>
+                        {getLoadButtonLabel()}
+                    </button>
                 </div>
             </div>
         </div>

@@ -4,7 +4,10 @@
     padding: 20px;
     min-height: 100vh;
     display: flex;
-    justify-content: center; /* centers the container */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
 }
 
 .container {
@@ -16,10 +19,18 @@
 }
 
 .grid {
+    width: 100%;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fit, 300px);
     gap: 15px;
     justify-content: center;
+    align-content: start; /* prevents the gap between rows from growing on wider screens */
+}
+
+.loadMoreSection{
+
+
+
 }
 
 
