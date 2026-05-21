@@ -29,8 +29,11 @@ public class NomadService {
 
         String filter = "\"" + projectName.toLowerCase() + "\" in Name";
 
-        return nomadClient.fetchJobsWithFilter(filter).doOnNext(nomadJob -> nomadJob.setServiceLink(findWorkingLink(nomadJob)));
-
+        return nomadClient
+            .fetchJobsWithFilter(filter)
+            .doOnNext(nomadJob ->
+                nomadJob.setServiceLink(findWorkingLink(nomadJob))
+            );
     }
 
 

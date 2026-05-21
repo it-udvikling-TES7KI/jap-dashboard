@@ -25,6 +25,11 @@ public class GitlabController {
         return gitlabClient.fetchProjects(50, 1);
     }
 
+    @Get("/projects/{projectId}")
+    Mono<GitlabProject> getGitlabProject(@PathVariable int projectId){
+        return gitlabService.getProject(projectId);
+    }
+
     @Get("/projects/{projectId}/commitFromLatestProdDeploy")
     Mono<GitlabClientDTOs.Commit> getCommitFromLatestProdDeploy(@PathVariable int projectId){
         return gitlabService.findCommitFromLatestProdDeploy(projectId);

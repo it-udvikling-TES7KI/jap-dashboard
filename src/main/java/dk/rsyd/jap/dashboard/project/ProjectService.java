@@ -3,7 +3,7 @@ package dk.rsyd.jap.dashboard.project;
 import dk.rsyd.jap.dashboard.gitlab.GitlabClient;
 import dk.rsyd.jap.dashboard.gitlab.GitlabProject;
 import dk.rsyd.jap.dashboard.gitlab.GitlabService;
-import dk.rsyd.jap.dashboard.harbor.ArtifactReportService;
+import dk.rsyd.jap.dashboard.harbor.artifactReport.ArtifactReportService;
 import jakarta.inject.Singleton;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,11 +31,11 @@ public class ProjectService {
             .map(GitlabProject::fromJapNameSpace)
             .flatMapSequential(gitlabProject -> {
                 var latestProdDeploy = artifactReportService
-                    .getArtifactReportFromLatestProdDeploy(gitlabProject.name())
+                    .getArtifactReportFromLatestProdDeploy(gitlabProject.id())
                     .singleOptional();
 
                 var latestMasterCommit = artifactReportService
-                    .getArtifactReportFromLatestMasterCommit(gitlabProject.name())
+                    .getArtifactReportFromLatestMasterCommit(gitlabProject.id())
                     .singleOptional();
 
                 return Mono.zip(

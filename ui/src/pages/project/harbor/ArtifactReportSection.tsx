@@ -11,26 +11,26 @@ import {ArtifactReportNavbar} from "../../../components/ArtifactReportNavbar.tsx
 
 
 export interface ArtifactReportSectionProps {
-    projectName: string;
+    projectId: number;
 }
 
-export function ArtifactReportSection({projectName}: ArtifactReportSectionProps) {
+export function ArtifactReportSection({projectId}: ArtifactReportSectionProps) {
     const [activeTab, setActiveTab] = useState(ArtifactReportFocus.LatestMasterCommit);
 
     const {data: masterCommitArtifactReport} = useQuery({
-        queryKey: ['masterCommitArtifactReport', projectName],
+        queryKey: ['masterCommitArtifactReport', projectId],
         queryFn: async () => {
-            if (projectName) return fetchArtifactReportFromLatestMasterCommit(projectName);
+            if (projectId) return fetchArtifactReportFromLatestMasterCommit(projectId);
         },
-        enabled: !!projectName
+        enabled: !!projectId
     });
 
     const {data: latestProdDeployArtifactReport} = useQuery({
-        queryKey: ['prodDeployArtifactReport', projectName],
+        queryKey: ['prodDeployArtifactReport', projectId],
         queryFn: async () => {
-            if (projectName) return fetchArtifactReportFromLatestProdDeploy(projectName);
+            if (projectId) return fetchArtifactReportFromLatestProdDeploy(projectId);
         },
-        enabled: !!projectName
+        enabled: !!projectId
     });
 
     function determineFocusedArtifactReport() {

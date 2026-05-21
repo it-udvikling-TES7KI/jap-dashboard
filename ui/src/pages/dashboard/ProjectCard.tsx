@@ -45,7 +45,7 @@ export default function ProjectCard({project, focusedArtifactReport}: ProjectCar
         <div className={`${styles.card} ${focusedSeverity ? getSeverityClass(focusedSeverity) : ""}`}>
             <Link
                 className={styles.projectLink}
-                to={`/project/${project.gitlabProject.name}`}>
+                to={`/project/${project.gitlabProject.id}`}>
 
                 <div className={styles.projectName}>
                     {project.gitlabProject.projectGroupPath && (

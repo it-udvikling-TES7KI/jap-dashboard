@@ -1,8 +1,7 @@
-package dk.rsyd.jap.dashboard.harbor;
+package dk.rsyd.jap.dashboard.harbor.artifactReport;
 
 import dk.rsyd.jap.dashboard.gitlab.GitlabClientDTOs;
 import dk.rsyd.jap.dashboard.gitlab.GitlabService;
-import dk.rsyd.jap.dashboard.harbor.artifactReport.ArtifactReport;
 import dk.rsyd.jap.dashboard.harbor.client.HarborClient;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
@@ -23,9 +22,8 @@ public class ArtifactReportService {
         this.gitlabService = gitlabService;
     }
 
-    public Mono<ArtifactReport> getArtifactReportFromLatestMasterCommit(String projectName) {
-        //todo find a way to do get projectId directly
-        return gitlabService.findProjectFromName(projectName)
+    public Mono<ArtifactReport> getArtifactReportFromLatestMasterCommit(int projectId) {
+        return gitlabService.getProject(projectId)
             .flatMap(gitlabProject -> {
                 var gitId = gitlabProject.id();
                 return gitlabService.fetchCommitFromPrimaryBranch(gitId)
@@ -33,21 +31,19 @@ public class ArtifactReportService {
                         if (latestCommit.shortId() == null) {
                             return Mono.empty();
                         }
-                        return getArtifactReport(projectName, latestCommit);
+                        return getArtifactReport(gitlabProject.name(), latestCommit);
                     });
             });
     }
 
-    public Mono<ArtifactReport> getArtifactReportFromLatestProdDeploy(String projectName) {
-        //todo find a way to do get projectId directly
-
-        return gitlabService.findProjectFromName(projectName)
+    public Mono<ArtifactReport> getArtifactReportFromLatestProdDeploy(int projectId) {
+        return gitlabService.getProject(projectId)
             .flatMap(gitlabProject ->
                 gitlabService.findCommitFromLatestProdDeploy(gitlabProject.id())
                     .flatMap(commit ->
-                        getArtifactReport(projectName, commit)
+                        getArtifactReport(gitlabProject.name(), commit)
                             .defaultIfEmpty(
-                                ArtifactReport.WithNoArtifactInfo(projectName, commit)
+                                ArtifactReport.WithNoArtifactInfo(gitlabProject.name(), commit)
                             )
                     )
                     .doOnError(LOG::error));

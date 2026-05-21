@@ -5,6 +5,7 @@ import io.micronaut.http.annotation.Header;
 import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.http.client.annotation.Client;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import static io.micronaut.http.HttpHeaders.ACCEPT;
 import static io.micronaut.http.HttpHeaders.USER_AGENT;
@@ -21,6 +22,10 @@ public interface GitlabClient {
         "&order_by=path&sort=asc" +
         "&archived=false")
     Flux<GitlabClientDTOs.GitlabProject> fetchProjects(@QueryValue int perPage, @QueryValue int page);
+
+    @Header(name = ACCEPT, value = "application/json")
+    @Get("/api/v4/projects/{projectId}")
+    Mono<GitlabClientDTOs.GitlabProject> fetchProjectFromId(@QueryValue int projectId);
 
     @Header(name = ACCEPT, value = "application/json")
     @Get("/api/v4/projects/{projectId}/repository/commits?ref_name=master&per_page=5&page=1")

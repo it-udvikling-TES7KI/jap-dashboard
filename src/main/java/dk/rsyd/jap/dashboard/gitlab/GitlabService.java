@@ -42,4 +42,9 @@ public class GitlabService {
             .switchIfEmpty(gitlabClient.fetchCommitsFromMainBranch(gitId))
             .next();
     }
+
+    public Mono<GitlabProject> getProject(int projectId) {
+        return gitlabClient.fetchProjectFromId(projectId)
+            .map(GitlabProject::fromJapNameSpace);
+    }
 }

@@ -1,6 +1,7 @@
 package dk.rsyd.jap.dashboard.harbor;
 
 import dk.rsyd.jap.dashboard.harbor.artifactReport.ArtifactReport;
+import dk.rsyd.jap.dashboard.harbor.artifactReport.ArtifactReportService;
 import dk.rsyd.jap.dashboard.harbor.client.HarborClient;
 import dk.rsyd.jap.dashboard.harbor.client.HarborClientDTOs;
 import io.micronaut.http.HttpRequest;
@@ -31,18 +32,18 @@ public class HarborController {
     }
 
 
-    @Get("/project/{projectName}/artifactReport/latestMasterCommit")
-    Mono<ArtifactReport> getArtifactReportFromLatestMasterCommit(HttpRequest<?> httpRequest, @PathVariable String projectName){
+    @Get("/project/{projectId}/artifactReport/latestMasterCommit")
+    Mono<ArtifactReport> getArtifactReportFromLatestMasterCommit(HttpRequest<?> httpRequest, @PathVariable int projectId){
         LOG.info("method={}, endpoint={}", httpRequest.getMethod(), httpRequest.getUri());
 
-        return artifactReportService.getArtifactReportFromLatestMasterCommit(projectName);
+        return artifactReportService.getArtifactReportFromLatestMasterCommit(projectId);
     }
 
-    @Get("/project/{projectName}/artifactReport/latestProdDeploy")
-    Mono<ArtifactReport> getArtifactReportFromLatestProdDeploy(HttpRequest<?> httpRequest, @PathVariable String projectName) {
+    @Get("/project/{projectId}/artifactReport/latestProdDeploy")
+    Mono<ArtifactReport> getArtifactReportFromLatestProdDeploy(HttpRequest<?> httpRequest, @PathVariable int projectId) {
         LOG.info("method={}, endpoint={}", httpRequest.getMethod(), httpRequest.getUri());
 
-        return artifactReportService.getArtifactReportFromLatestProdDeploy(projectName);
+        return artifactReportService.getArtifactReportFromLatestProdDeploy(projectId);
     }
 
     //todo not in use

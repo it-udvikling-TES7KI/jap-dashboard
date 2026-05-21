@@ -10,3 +10,13 @@ export async function fetchGitlabProjects() {
     return await response.json() as GitlabProject[];
 
 }
+
+export async function fetchGitlabProjectById(id: string): Promise<GitlabProject> {
+
+    const options = {
+        method: 'GET',
+    }
+
+    const response = await fetch(gitlabUrl + 'projects/' + id, options)
+    return await response.json() as GitlabProject;
+}
