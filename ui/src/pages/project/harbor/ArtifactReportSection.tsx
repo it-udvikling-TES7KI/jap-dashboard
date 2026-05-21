@@ -22,7 +22,10 @@ export function ArtifactReportSection({projectId}: ArtifactReportSectionProps) {
         queryFn: async () => {
             if (projectId) return fetchArtifactReportFromLatestMasterCommit(projectId);
         },
-        enabled: !!projectId
+        enabled: !!projectId,
+        retry: (failureCount) => {
+            return failureCount < 1;
+        }
     });
 
     const {data: latestProdDeployArtifactReport} = useQuery({
@@ -30,7 +33,10 @@ export function ArtifactReportSection({projectId}: ArtifactReportSectionProps) {
         queryFn: async () => {
             if (projectId) return fetchArtifactReportFromLatestProdDeploy(projectId);
         },
-        enabled: !!projectId
+        enabled: !!projectId,
+        retry: (failureCount) => {
+            return failureCount < 1;
+        }
     });
 
     function determineFocusedArtifactReport() {

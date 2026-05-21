@@ -15,7 +15,7 @@ micronaut:
         # From io.micronaut.http.server.netty.handler.accesslog.element.AccessLogFormatParser:
         # common - %h %l %U %t "%r" %s %b Common Log Format (CLF)
         # combined - %h %l %U %t "%r" %s %b "%{Referer}i" "%{User-Agent}i" Combined Log Format
-        log-format: remote=%a request="%r" status=%s bytes=%b time.ms=%D
+        log-format: remote=%a request="%r" nomadStatus=%s bytes=%b time.ms=%D
         exclusions:
           - /assets/js/materialize.min.js
           - /assets/js/init.js

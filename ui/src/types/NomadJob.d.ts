@@ -3,5 +3,6 @@ export interface NomadJob {
     name: string;
     serviceLink: string;
     nomadLink: string;
-
+    nomadStatus: string;
+    healthStatus: string;
 }

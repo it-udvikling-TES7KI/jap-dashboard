@@ -3,12 +3,14 @@ package dk.rsyd.jap.dashboard.nomad;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Secured(SecurityRule.IS_ANONYMOUS)
 @Controller("/api/nomad")
@@ -23,10 +25,14 @@ public class NomadController {
     }
 
     @Get("/jobs")
-    Flux<NomadJobDTO> getNomadJobsFromProjectName(HttpRequest<?> httpRequest, @QueryValue String projectName){
+    Flux<NomadJob> getNomadJobsFromProjectName(HttpRequest<?> httpRequest, @QueryValue String projectName){
         LOG.info("method={}, endpoint={}", httpRequest.getMethod(), httpRequest.getUri());
 
-        var response = nomadService.getFromProjectName(projectName);
-        return response.map(NomadJobDTO::from);
+        return nomadService.getFromProjectName(projectName);
+    }
+
+    @Get("/job/{jobId}")
+    Mono<NomadJob> getNomadJob(@PathVariable String jobId){
+        return nomadService.getJob(jobId);
     }
 }

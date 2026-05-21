@@ -33,24 +33,25 @@ export function NomadSection({projectName}: NomadSectionProps) {
                 <div className={styles.jobList}>
                     {nomadJobs?.map((job) => (
                         <div key={job.id} className={styles.jobCard}>
-                            <div className={styles.cardHeader}>
+                            <a href={job.nomadLink} target="_blank" rel="noopener noreferrer" className={styles.cardHeader}>
                                 <div className={styles.jobName}>{job.name}</div>
                                 <div className={styles.iconContainer}>
-                                    <a href={job.nomadLink} target="_blank" rel="noopener noreferrer">
-                                        <img src={nomad_icon} alt={"Nomad Logo"}/>
-                                    </a>
+                                    <img src={nomad_icon} alt={"Nomad Logo"}/>
                                 </div>
-                            </div>
-                            <div className={styles.links}>
-                                {job.serviceLink ?
-                                    <a href={job.serviceLink}
-                                       target="_blank"
-                                       rel="noopener noreferrer">
-                                        {job.serviceLink}
-                                    </a>
-                                    :
-                                    "no link to service was found"}
-                            </div>
+                                <div className={styles.jobStatus}>
+                                    Nomad Status: {job.nomadStatus || "unknown"}
+                                </div>
+                            </a>
+                            <a
+                                href={job.serviceLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={styles.cardContent}>
+                                <span className={styles.serviceLink}> {job.serviceLink} </span>
+                                <div className={styles.jobStatus}>
+                                    Health Check: {job.healthStatus || "unknown"}
+                                </div>
+                            </a>
                         </div>
                     ))}
                 </div>

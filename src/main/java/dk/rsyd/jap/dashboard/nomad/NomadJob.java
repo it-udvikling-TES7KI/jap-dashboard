@@ -1,76 +1,35 @@
 package dk.rsyd.jap.dashboard.nomad;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.micronaut.serde.annotation.Serdeable;
 
 @Serdeable
-public class NomadJob {
+public record NomadJob(
+    String id,
+    String name,
+    String serviceLink,
+    String nomadStatus,
+    String healthStatus,
+    String nomadLink
+) {
 
-    @JsonProperty("ID")
-    private String id;
-
-    @JsonProperty("Name")
-    private String name;
-
-    private String serviceLink;
-
-    private String nomadLink;
-
-    @JsonCreator
-    public NomadJob(String ID, String Name) {
-        this.id = ID;
-        this.name = Name;
-        this.nomadLink = "https://nomad.rsyd.net/ui/jobs/" + name + "@jap";
+    public NomadJob {
+        if (nomadLink == null) {
+            nomadLink = findNomadLink(name);
+        }
     }
 
-    /**
-     * The environment can be found as the last part of the Nomad Jobs names. e.g "jap-service-dashboard-staging"
-     *
-     * @return the env
-     */
-    public String findEnv() {
-        String[] nameArr = name.split("-");
-        return nameArr[nameArr.length - 1];
+    public static NomadJob fromDTO(NomadClientDTOs.NomadJob nomadJob, String serviceLink, String healthStatus) {
+        return new NomadJob(
+            nomadJob.id(),
+            nomadJob.name(),
+            serviceLink,
+            nomadJob.status(),
+            healthStatus,
+            findNomadLink(nomadJob.name())
+        );
     }
 
-    public String getNomadLink() {
-        return nomadLink;
-    }
-
-    public void setNomadLink(String nomadLink) {
-        this.nomadLink = nomadLink;
-    }
-
-    public String getServiceLink() {
-        return serviceLink;
-    }
-
-    public void setServiceLink(String serviceLink) {
-        this.serviceLink = serviceLink;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String ID) {
-        this.id = ID;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String Name) {
-        this.name = Name;
-    }
-
-    @Override
-    public String toString() {
-        return "NomadProject{" +
-            "id='" + id + '\'' +
-            ", name='" + name + '\'' +
-            '}';
+    private static String findNomadLink(String name) {
+        return "https://nomad.rsyd.net/ui/jobs/" + name + "@jap";
     }
 }
