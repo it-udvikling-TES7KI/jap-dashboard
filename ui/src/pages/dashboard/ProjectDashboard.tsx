@@ -67,6 +67,7 @@ export default function ProjectDashboard() {
                 </div>
                 <div className={styles.loadMoreSection}>
                     <button
+                        className={styles.loadMoreButton}
                         onClick={() => fetchNextPage()}
                         disabled={isLoadButtonDisabled}>
                         {getLoadButtonLabel()}
