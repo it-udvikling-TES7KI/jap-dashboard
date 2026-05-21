@@ -6,26 +6,24 @@ import io.micronaut.serde.annotation.Serdeable;
 public record NomadJob(
     String id,
     String name,
+    String gitCommit,
     String serviceLink,
     String nomadStatus,
     String healthStatus,
-    String nomadLink
+    String nomadLink,
+    String logscaleLink
 ) {
 
-    public NomadJob {
-        if (nomadLink == null) {
-            nomadLink = findNomadLink(name);
-        }
-    }
-
-    public static NomadJob fromDTO(NomadClientDTOs.NomadJob nomadJob, String serviceLink, String healthStatus) {
+    public static NomadJob fromDTO(NomadClientDTOs.NomadJob nomadJob, String serviceLink, String healthStatus, String logscaleLink) {
         return new NomadJob(
             nomadJob.id(),
             nomadJob.name(),
+            nomadJob.meta().GitSha(),
             serviceLink,
             nomadJob.status(),
             healthStatus,
-            findNomadLink(nomadJob.name())
+            findNomadLink(nomadJob.name()),
+            logscaleLink
         );
     }
 

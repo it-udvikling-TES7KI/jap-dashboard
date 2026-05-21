@@ -1,4 +1,4 @@
-import styles from "./Section.module.css"
+import styles from "./ProjectSection.module.css"
 import * as React from "react";
 
 interface ProjectSectionProps {

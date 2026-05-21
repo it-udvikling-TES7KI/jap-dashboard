@@ -4,7 +4,6 @@
     margin-top: 1rem;
     padding: 1rem;
     gap: 1rem;
-
 }
 
 
@@ -24,12 +23,11 @@
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
     overflow: hidden;
-
 }
 
 .cardHeader {
     text-decoration: none;
-    padding: 1rem 1rem 0.5rem 1rem;
+    padding: 1rem;
     display: flex;
     justify-content: space-between;
     gap: 0.5rem;
@@ -40,6 +38,8 @@
         width: 100px;
     }
 }
+
+
 
 .jobName {
     color: #fff;
@@ -53,16 +53,15 @@
     padding: 0.2rem 0.6rem;
     border-radius: 999px;
     font-size: 0.78rem;
-    font-weight: 700;
     letter-spacing: 0.02em;
     text-transform: uppercase;
     color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    background: rgba(33, 149, 241, 0.90);
+    border: 1px solid #ffffff;
+    background: rgb(29 147 102);
     backdrop-filter: blur(1px);
 }
 
-.cardContent {
+.serviceLinkContainer {
     text-decoration: none;
     justify-content: space-between;
     padding: 1rem;
@@ -74,3 +73,25 @@
     text-decoration: underline;  /* manually add back to just the URL */
     color: inherit;
 }
+
+.externalLinks {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+
+    .iconContainer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 5px;
+        width: 48px;
+    }
+
+    .iconContainer:hover {
+        background: #ddd;
+        cursor: pointer;
+    }
+}
+

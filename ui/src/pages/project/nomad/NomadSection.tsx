@@ -1,5 +1,6 @@
 import styles from "./NomadSection.module.css";
 import nomad_icon from "../../../assets/nomad_icon.svg"
+import logscale_icon from "../../../assets/logscale_icon.svg"
 import {useQuery} from "@tanstack/react-query";
 import {fetchNomadJobsByProjectName} from "../../../hooks/NomadHook.ts";
 import ProjectSection from "../ProjectSection.tsx";
@@ -39,19 +40,29 @@ export function NomadSection({projectName}: NomadSectionProps) {
                                     <img src={nomad_icon} alt={"Nomad Logo"}/>
                                 </div>
                                 <div className={styles.jobStatus}>
-                                    Nomad Status: {job.nomadStatus || "unknown"}
+                                    Nomad Status: <strong> {job.nomadStatus || "unknown"} </strong>
                                 </div>
                             </a>
                             <a
                                 href={job.serviceLink}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className={styles.cardContent}>
+                                className={styles.serviceLinkContainer}>
                                 <span className={styles.serviceLink}> {job.serviceLink} </span>
                                 <div className={styles.jobStatus}>
-                                    Health Check: {job.healthStatus || "unknown"}
+                                    Health Check: <strong> {job.healthStatus || "unknown"} </strong>
                                 </div>
                             </a>
+                            <div
+                                className={styles.externalLinks}>
+                                <a
+                                    href={job.logscaleLink}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={styles.iconContainer}>
+                                    <img src={logscale_icon} alt={"LogScale logo"}/>
+                                </a>
+                            </div>
                         </div>
                     ))}
                 </div>

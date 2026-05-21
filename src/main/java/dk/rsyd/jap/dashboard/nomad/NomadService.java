@@ -43,10 +43,10 @@ public class NomadService {
                         var fullServiceLink = "https://" + serviceLink.get();
 
                         return checkHealth(fullServiceLink)
-                            .map(status -> NomadJob.fromDTO(nomadJob, fullServiceLink, status));
+                            .map(status -> NomadJob.fromDTO(nomadJob, fullServiceLink, status, LogScaleUrlBuilder.buildLogsUrl(nomadJob.id())));
                     }
 
-                    return Mono.just(NomadJob.fromDTO(nomadJob, null, "UNKNOWN"));
+                    return Mono.just(NomadJob.fromDTO(nomadJob, null, "UNKNOWN",null));
                 }
             );
     }

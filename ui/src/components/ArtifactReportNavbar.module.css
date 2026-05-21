@@ -5,12 +5,11 @@
 }
 
 .tab{
-    border: 2px solid #f4f6f9;
+    border: 1px solid #ddd;
     border-bottom: none;
     padding: 1rem;
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
-
 }
 
 .tab:hover{
