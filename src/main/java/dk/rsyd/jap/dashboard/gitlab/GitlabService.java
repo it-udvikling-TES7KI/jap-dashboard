@@ -23,14 +23,6 @@ public class GitlabService {
             .map(GitlabClientDTOs.Job::commit);
     }
 
-    public Mono<GitlabClientDTOs.GitlabProject> findProjectFromName(String projectName) {
-        return gitlabClient.fetchProjectsFromName(projectName)
-            .filter(gitlabProject ->
-                gitlabProject.name().equalsIgnoreCase(projectName))
-            .next();
-
-    }
-
     /**
      * Checks both Master and Main as reference.
      *
@@ -46,5 +38,10 @@ public class GitlabService {
     public Mono<GitlabProject> getProject(int projectId) {
         return gitlabClient.fetchProjectFromId(projectId)
             .map(GitlabProject::fromJapNameSpace);
+    }
+
+    public Mono<Commit> findCommitFromShortId(int projectId, String shortId) {
+        return gitlabClient.fetchCommitFromSHA(projectId, shortId)
+            .map(Commit::fromDTO);
     }
 }

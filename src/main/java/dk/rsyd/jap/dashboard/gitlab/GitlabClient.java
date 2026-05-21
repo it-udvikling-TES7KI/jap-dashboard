@@ -35,12 +35,12 @@ public interface GitlabClient {
     @Get("/api/v4/projects/{projectId}/repository/commits?ref_name=main&per_page=5&page=1")
     Flux<GitlabClientDTOs.Commit> fetchCommitsFromMainBranch(@QueryValue int projectId);
 
-    @Header(name = ACCEPT, value = "application/json")
-    @Get("/api/v4/groups/5026930/projects?include_subgroups=true&search={name}&simple=true")
-    Flux<GitlabClientDTOs.GitlabProject> fetchProjectsFromName(@QueryValue String name);
-
     //TODO perPage might need to be adjusted
     @Header(name = ACCEPT, value = "application/json")
     @Get("/api/v4/projects/{projectId}/jobs?scope=success&per_page=250&page=1")
     Flux<GitlabClientDTOs.Job> fetchSuccessfulJobsFromProject(@QueryValue int projectId);
+
+    @Header(name = ACCEPT, value = "application/json")
+    @Get("/api/v4/projects/{projectId}/repository/commits/{sha}")
+    Mono<GitlabClientDTOs.Commit> fetchCommitFromSHA(@QueryValue int projectId, @QueryValue String sha);
 }

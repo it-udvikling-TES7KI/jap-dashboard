@@ -20,19 +20,26 @@ public class GitlabController {
         this.gitlabService = gitlabService;
     }
 
+    //todo path
     @Get
-    Flux<GitlabClientDTOs.GitlabProject> getGitlabProjects(){
+    Flux<GitlabClientDTOs.GitlabProject> getGitlabProjects() {
         return gitlabClient.fetchProjects(50, 1);
     }
 
     @Get("/projects/{projectId}")
-    Mono<GitlabProject> getGitlabProject(@PathVariable int projectId){
+    Mono<GitlabProject> getGitlabProject(@PathVariable int projectId) {
         return gitlabService.getProject(projectId);
     }
 
+    //todo fix path
     @Get("/projects/{projectId}/commitFromLatestProdDeploy")
-    Mono<GitlabClientDTOs.Commit> getCommitFromLatestProdDeploy(@PathVariable int projectId){
+    Mono<GitlabClientDTOs.Commit> getCommitFromLatestProdDeploy(@PathVariable int projectId) {
         return gitlabService.findCommitFromLatestProdDeploy(projectId);
+    }
+
+    @Get("project/{projectId}/commit/{shortId}")
+    Mono<Commit> getCommitFromShortId(@PathVariable int projectId, @PathVariable String shortId) {
+        return gitlabService.findCommitFromShortId(projectId, shortId);
     }
 
 }

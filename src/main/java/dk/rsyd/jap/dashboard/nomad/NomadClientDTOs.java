@@ -50,7 +50,7 @@ public record NomadClientDTOs() {
     @Serdeable
     public record Meta(
         @JsonProperty("GIT-SHA")
-        String GitSha
+        String gitSha
     ) {
     }
 
@@ -67,8 +67,17 @@ public record NomadClientDTOs() {
     @Serdeable
     public record Task(
         @JsonProperty("Services")
-        List<Service> services
+        List<Service> services,
+
+        @JsonProperty("Config")
+        Config config
     ) {
+    }
+
+    @Serdeable
+    public record Config(
+        String image
+    ){
     }
 
     @Serdeable

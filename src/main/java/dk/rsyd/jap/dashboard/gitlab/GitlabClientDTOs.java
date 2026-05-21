@@ -21,7 +21,9 @@ public class GitlabClientDTOs {
         String id,
         @JsonProperty("short_id") String shortId,
         @JsonProperty("created_at") OffsetDateTime createdAt,
-        @JsonProperty("web_url") String link) {
+        @JsonProperty("web_url") String link,
+        String title
+    ) {
     }
 
     @Serdeable

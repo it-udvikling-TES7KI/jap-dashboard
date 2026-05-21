@@ -36,7 +36,7 @@ export default function Project() {
             <h1 className={styles.projectName}>{gitlabProject?.name}</h1>
             <div className={styles.sections}>
                 <ArtifactReportSection projectId={projectIdNumber}/>
-                <NomadSection projectName={gitlabProject?.name}/>
+                <NomadSection projectId={projectIdNumber} projectName={gitlabProject?.name}/>
             </div>
         </div>
     );

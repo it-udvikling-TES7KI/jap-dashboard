@@ -4,3 +4,10 @@ export interface GitlabProject {
     projectGroupPath: string;
     gitlabLink: string;
 }
+
+export interface GitlabCommit {
+    id:number;
+    shortId: string;
+    title: string;
+    gitlabLink: string;
+}
