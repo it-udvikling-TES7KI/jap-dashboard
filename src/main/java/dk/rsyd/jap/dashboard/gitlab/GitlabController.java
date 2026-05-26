@@ -1,8 +1,10 @@
 package dk.rsyd.jap.dashboard.gitlab;
 
+import io.micronaut.http.HttpRequest;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
+import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
 import reactor.core.publisher.Flux;
@@ -20,10 +22,9 @@ public class GitlabController {
         this.gitlabService = gitlabService;
     }
 
-    //todo path
-    @Get
-    Flux<GitlabClientDTOs.GitlabProject> getGitlabProjects() {
-        return gitlabClient.fetchProjects(50, 1);
+    @Get("/projects")
+    Flux<GitlabClientDTOs.GitlabProject> getGitlabProjects(HttpRequest<?> httpRequest, @QueryValue int perPage, @QueryValue(defaultValue = "1") int page) {
+        return gitlabClient.fetchProjects(perPage, page);
     }
 
     @Get("/projects/{projectId}")

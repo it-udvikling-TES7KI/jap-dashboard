@@ -1,28 +1,32 @@
-import {ProjectPreview} from "../../types/ProjectPreview";
 import styles from "./ProjectCard.module.css"
 import {Link} from "react-router-dom";
 import question_mark from "../../assets/question_mark.svg";
 import gitlab_icon from "../../assets/gitlab_icon.svg";
 import harbor_icon from "../../assets/harbor_icon.svg";
 import {ArtifactReportFocus} from "../../types/ArtifactReportFocus.ts";
+import {GitlabProject} from "../../types/GitlabProject";
+import {useQuery} from "@tanstack/react-query";
+import {fetchArtifactReportFromLatestMasterCommit, fetchArtifactReportFromLatestProdDeploy} from "../../hooks/HarborHook.ts";
 
 export interface ProjectCardProps {
-    project: ProjectPreview;
-    focusedArtifactReport: ArtifactReportFocus;
+    gitProject: GitlabProject;
+    artifactReportFocus: ArtifactReportFocus;
 }
 
-export default function ProjectCard({project, focusedArtifactReport}: ProjectCardProps) {
+export default function ProjectCard({gitProject, artifactReportFocus}: ProjectCardProps) {
 
-    const focusedSeverity = determineFocusedSeverity();
+    const {data: artifactReport} = useQuery({
+        queryKey: ['artifactReport', gitProject.id, artifactReportFocus],
+        queryFn: determineArtifactRequest,
+        enabled: !!gitProject.id,
+    })
 
-    function determineFocusedSeverity() {
-        switch (focusedArtifactReport) {
+    function determineArtifactRequest() {
+        switch (artifactReportFocus) {
             case ArtifactReportFocus.LatestMasterCommit:
-                return project.latestMasterCommitReport?.severity;
+                return fetchArtifactReportFromLatestMasterCommit(gitProject.id);
             case ArtifactReportFocus.LatestProdDeploy:
-                return project.latestProdDeployReport?.severity;
-            default:
-                return undefined;
+                return fetchArtifactReportFromLatestProdDeploy(gitProject.id)
         }
     }
 
@@ -42,20 +46,20 @@ export default function ProjectCard({project, focusedArtifactReport}: ProjectCar
     }
 
     return (
-        <div className={`${styles.card} ${focusedSeverity ? getSeverityClass(focusedSeverity) : ""}`}>
+        <div className={`${styles.card} ${artifactReport?.severity ? getSeverityClass(artifactReport.severity) : ""}`}>
             <Link
                 className={styles.projectLink}
-                to={`/project/${project.gitlabProject.id}`}>
+                to={`/project/${gitProject.id}`}>
 
                 <div className={styles.projectName}>
-                    {project.gitlabProject.projectGroupPath && (
-                        <div>{project.gitlabProject.projectGroupPath} </div>
+                    {gitProject.projectGroupPath && (
+                        <div>{gitProject.projectGroupPath} </div>
                     )}
-                    <div className={styles.projectName}> {project.gitlabProject.name}</div>
+                    <div className={styles.projectName}> {gitProject.name}</div>
                 </div>
-                {focusedSeverity ? (
+                {artifactReport?.severity ? (
                         <div>
-                            {focusedSeverity ?? "Unknown"}
+                            {artifactReport.severity ?? "Unknown"}
                         </div>) :
 
                     (
@@ -67,16 +71,16 @@ export default function ProjectCard({project, focusedArtifactReport}: ProjectCar
             <div className={styles.externalLinks}>
                 <div className={styles.iconContainer}>
                     <a
-                        href={project.gitlabProject.gitlabLink}
+                        href={gitProject.gitlabLink}
                         target="_blank"
                         rel="noopener noreferrer">
                         <img src={gitlab_icon} alt="Gitlab Logo"/>
                     </a>
                 </div>
-                {project.latestMasterCommitReport?.repositoryLink && (
+                {artifactReport?.repositoryLink && (
                     <div className={styles.iconContainer}>
                         <a
-                            href={project.latestMasterCommitReport?.repositoryLink}
+                            href={artifactReport.repositoryLink}
                             target="_blank"
                             rel="noopener noreferrer">
                             <img

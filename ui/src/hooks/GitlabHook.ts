@@ -2,11 +2,11 @@ import {GitlabCommit, GitlabProject} from "../types/GitlabProject";
 
 const gitlabUrl = '/api/gitlab/'
 
-export async function fetchGitlabProjects() {
+export async function fetchGitlabProjects({pageParam = 1}) {
     const options = {
         method: 'GET',
     }
-    const response = await fetch(gitlabUrl, options)
+    const response = await fetch(gitlabUrl+`projects?page=${pageParam}&perPage=15`, options)
     return await response.json() as GitlabProject[];
 
 }

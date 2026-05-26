@@ -1,10 +1,10 @@
 import {useInfiniteQuery} from "@tanstack/react-query";
 import styles from "./ProjectDashboard.module.css";
-import {fetchProjectPreviews} from "../../hooks/ProjectHook.ts";
 import ProjectCard from "./ProjectCard.tsx";
 import {useState} from "react";
 import {ArtifactReportNavbar} from "../../components/ArtifactReportNavbar.tsx";
 import {ArtifactReportFocus} from "../../types/ArtifactReportFocus.ts";
+import {fetchGitlabProjects} from "../../hooks/GitlabHook.ts";
 
 export default function ProjectDashboard() {
     const [activeTab, setActiveTab] = useState(ArtifactReportFocus.LatestMasterCommit);
@@ -17,8 +17,8 @@ export default function ProjectDashboard() {
         isFetchingNextPage,
     } =
         useInfiniteQuery({
-            queryKey: ['projectPreviews'],
-            queryFn: fetchProjectPreviews,
+            queryKey: ['gitlabProjects'],
+            queryFn: fetchGitlabProjects,
             initialPageParam: 1,
             getNextPageParam: (lastPage, _allPages, lastPageParam) => {
                 if (lastPage.length === 0) {
@@ -59,8 +59,8 @@ export default function ProjectDashboard() {
                         group.map((project, index) => (
                             <ProjectCard
                                 key={index}
-                                project={project}
-                                focusedArtifactReport={activeTab}
+                                gitProject={project}
+                                artifactReportFocus={activeTab}
                             />
                         ))
                     )}
