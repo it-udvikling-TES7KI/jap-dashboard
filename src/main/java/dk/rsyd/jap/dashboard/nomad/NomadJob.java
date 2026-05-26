@@ -10,8 +10,10 @@ public record NomadJob(
     String serviceLink,
     String nomadStatus,
     String healthStatus,
+    String healthURL,
     String nomadLink,
-    String logscaleLink
+    String logscaleLink,
+    String docsURL
 ) {
 
     public static NomadJob fromDTO(
@@ -29,8 +31,10 @@ public record NomadJob(
             serviceLink,
             nomadJob.status(),
             healthStatus,
+            findHealthURL(serviceLink),
             findNomadLink(nomadJob.name()),
-            logscaleLink
+            logscaleLink,
+            findDocsURL(serviceLink)
         );
     }
 
@@ -84,4 +88,8 @@ public record NomadJob(
     private static String findNomadLink(String name) {
         return "https://nomad.rsyd.net/ui/jobs/" + name + "@jap";
     }
+
+    private static String findHealthURL(String serviceLink) { return serviceLink + "/health"; }
+
+    private static String findDocsURL(String serviceLink) { return serviceLink + "/docs"; }
 }

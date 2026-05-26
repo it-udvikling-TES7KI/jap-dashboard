@@ -1,6 +1,7 @@
 package dk.rsyd.jap.dashboard.gitlab;
 
 import jakarta.inject.Singleton;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Objects;
@@ -12,6 +13,11 @@ public class GitlabService {
 
     public GitlabService(GitlabClient gitlabClient) {
         this.gitlabClient = gitlabClient;
+    }
+
+    public Flux<GitlabProject> getProjects(int perPage, int page){
+        return  gitlabClient.fetchProjects(perPage, page)
+            .map(GitlabProject::fromJapNameSpace);
     }
 
     public Mono<GitlabClientDTOs.Commit> findCommitFromLatestProdDeploy(int projectId) {

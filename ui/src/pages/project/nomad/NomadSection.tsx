@@ -11,7 +11,7 @@ interface NomadSectionProps {
 
 export function NomadSection({projectId, projectName}: NomadSectionProps) {
 
-    const {isError, error, isPending, data: nomadJobs} = useQuery({
+    const {isError, error, isPending, data: nomadJobs = []} = useQuery({
         queryKey: ['nomadJobs', projectName],
         queryFn: () => {
             if (projectName) return fetchNomadJobsByProjectName(projectName);
@@ -27,14 +27,18 @@ export function NomadSection({projectId, projectName}: NomadSectionProps) {
         return <span>Error: {error.message}</span>
     }
 
+
     return (
         <ProjectSection title={"Nomad Jobs"}>
             <div className={styles.nomadSection}>
-                <div className={styles.jobList}>
-                    {nomadJobs?.map((job) => (
-                        <NomadJobCard key={job.id} projectId={projectId} nomadJob={job}/>
-                    ))}
-                </div>
+                {nomadJobs.length > 0 ?
+                    (<div className={styles.jobList}>
+                        {nomadJobs?.map((job) => (
+                            <NomadJobCard key={job.id} projectId={projectId} nomadJob={job}/>
+                        ))}
+                    </div>) :
+                    (<span>No Nomad jobs found for this project.</span>)
+                }
             </div>
         </ProjectSection>
     )

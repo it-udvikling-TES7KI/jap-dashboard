@@ -12,3 +12,21 @@
     gap: 1rem;
 }
 
+.doubleSection {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.docSection {
+    min-height: 500px;
+    display: flex;
+    flex: 1;
+}
+
+.iframe{
+    display: flex;
+    flex: 1;
+}
+
+

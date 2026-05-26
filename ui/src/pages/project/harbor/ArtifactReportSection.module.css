@@ -1,25 +1,32 @@
 
-.container {
+.sectionContainer {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.artifactContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.detailsContainer {
     display: flex;
     align-items: center;
     gap: 1rem;
 }
 
-.gitDetails {
-    display: flex;
-    width: 15%;
-}
-
 .artifactDetails {
     display: flex;
     flex: 1;
-    justify-content: space-between;
+    gap: 1rem;
     align-items: center;
 }
 
 .vulnerabilityBarContainer {
-    width: 60%;
-    height: 250px;
+    display: flex;
+    flex: 0 0 250px;
 }
 
 .reportInfo {

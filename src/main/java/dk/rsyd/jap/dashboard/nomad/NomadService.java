@@ -27,6 +27,15 @@ public class NomadService {
             .flatMap(nomadJob -> getJob(nomadJob.id()));
     }
 
+    public Mono<NomadJob> getProdJobsFromProjectName(String projectName) {
+        String filter = "\"" + projectName.toLowerCase() + "\" in Name and \"-prod\"  in Name";
+
+        return nomadClient
+            .fetchJobsWithFilter(filter)
+            .flatMap(nomadJob -> getJob(nomadJob.id()))
+            .next();
+    }
+
     public Mono<NomadJob> getJob(String jobId) {
         return nomadClient.fetchJob(jobId)
             .flatMap(nomadJob -> {
@@ -46,7 +55,7 @@ public class NomadService {
                             .map(status -> NomadJob.fromDTO(nomadJob, fullServiceLink, status, LogScaleUrlBuilder.buildLogsUrl(nomadJob.id())));
                     }
 
-                    return Mono.just(NomadJob.fromDTO(nomadJob, null, "UNKNOWN",null));
+                    return Mono.just(NomadJob.fromDTO(nomadJob, null, "UNKNOWN", null));
                 }
             );
     }

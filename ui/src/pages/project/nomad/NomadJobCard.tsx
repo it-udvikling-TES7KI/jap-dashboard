@@ -11,11 +11,11 @@ interface NomadJobCardProps {
     nomadJob: NomadJob;
 }
 
-export default function NomadJobCard({ projectId, nomadJob }: NomadJobCardProps) {
+export default function NomadJobCard({projectId, nomadJob}: NomadJobCardProps) {
 
     const {data: gitCommit} = useQuery({
         queryKey: ['commit', nomadJob.gitCommit],
-        queryFn: ()=>{
+        queryFn: () => {
             return fetchCommit(projectId, nomadJob.gitCommit)
         },
         enabled: (!!nomadJob.gitCommit && !!projectId)
@@ -26,7 +26,7 @@ export default function NomadJobCard({ projectId, nomadJob }: NomadJobCardProps)
             <a href={nomadJob.nomadLink} target="_blank" rel="noopener noreferrer" className={styles.cardHeader}>
                 <div className={styles.jobName}>{nomadJob.name}</div>
                 <div className={styles.iconContainer}>
-                    <img src={nomad_icon} alt="Nomad Logo" />
+                    <img src={nomad_icon} alt="Nomad Logo"/>
                 </div>
                 <div className={styles.jobStatus}>
                     Nomad Status: <strong> {nomadJob.nomadStatus || "unknown"} </strong>
@@ -40,22 +40,26 @@ export default function NomadJobCard({ projectId, nomadJob }: NomadJobCardProps)
                 className={styles.serviceLinkContainer}
             >
                 <span className={styles.serviceLink}> {nomadJob.serviceLink} </span>
-                <div className={styles.jobStatus}>
+                <a className={styles.jobStatus}
+                   href={nomadJob.healthURL}
+                   target="_blank"
+                   rel="noopener noreferrer"
+                >
                     Health status: <strong> {nomadJob.healthStatus || "unknown"} </strong>
-                </div>
+                </a>
             </a>
 
             <div className={styles.externalLinks}>
 
-                {gitCommit?.gitlabLink &&(
-                <a
-                    href={gitCommit?.gitlabLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.iconContainer}
-                >
-                    <img src={gitlab_icon} alt="Gitlab logo" />
-                </a>
+                {gitCommit?.gitlabLink && (
+                    <a
+                        href={gitCommit?.gitlabLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.iconContainer}
+                    >
+                        <img src={gitlab_icon} alt="Gitlab logo"/>
+                    </a>
                 )}
                 <a
                     href={nomadJob.logscaleLink}
@@ -63,7 +67,7 @@ export default function NomadJobCard({ projectId, nomadJob }: NomadJobCardProps)
                     rel="noopener noreferrer"
                     className={styles.iconContainer}
                 >
-                    <img src={logscale_icon} alt="LogScale logo" />
+                    <img src={logscale_icon} alt="LogScale logo"/>
                 </a>
             </div>
         </div>

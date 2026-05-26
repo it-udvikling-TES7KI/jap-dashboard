@@ -14,17 +14,15 @@ import reactor.core.publisher.Mono;
 @Controller("/api/gitlab")
 public class GitlabController {
 
-    private final GitlabClient gitlabClient;
     private final GitlabService gitlabService;
 
-    public GitlabController(GitlabClient gitlabClient, GitlabService gitlabService) {
-        this.gitlabClient = gitlabClient;
+    public GitlabController(GitlabService gitlabService) {
         this.gitlabService = gitlabService;
     }
 
     @Get("/projects")
-    Flux<GitlabClientDTOs.GitlabProject> getGitlabProjects(HttpRequest<?> httpRequest, @QueryValue int perPage, @QueryValue(defaultValue = "1") int page) {
-        return gitlabClient.fetchProjects(perPage, page);
+    Flux<GitlabProject> getGitlabProjects(HttpRequest<?> httpRequest, @QueryValue int perPage, @QueryValue(defaultValue = "1") int page) {
+        return gitlabService.getProjects(perPage, page);
     }
 
     @Get("/projects/{projectId}")

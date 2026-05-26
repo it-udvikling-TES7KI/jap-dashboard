@@ -6,5 +6,7 @@ export interface NomadJob {
     nomadLink: string;
     nomadStatus: string;
     healthStatus: string;
+    healthURL: string;
     logscaleLink: string;
+    docsURL: string;
 }

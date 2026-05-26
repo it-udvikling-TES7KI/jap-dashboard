@@ -1,12 +1,12 @@
 import styles from "./ProjectCard.module.css"
 import {Link} from "react-router-dom";
-import question_mark from "../../assets/question_mark.svg";
 import gitlab_icon from "../../assets/gitlab_icon.svg";
 import harbor_icon from "../../assets/harbor_icon.svg";
 import {ArtifactReportFocus} from "../../types/ArtifactReportFocus.ts";
 import {GitlabProject} from "../../types/GitlabProject";
 import {useQuery} from "@tanstack/react-query";
 import {fetchArtifactReportFromLatestMasterCommit, fetchArtifactReportFromLatestProdDeploy} from "../../hooks/HarborHook.ts";
+import VulnerabilityCardSection from "./card_sections/VulnerabilityCardSection.tsx";
 
 export interface ProjectCardProps {
     gitProject: GitlabProject;
@@ -15,7 +15,7 @@ export interface ProjectCardProps {
 
 export default function ProjectCard({gitProject, artifactReportFocus}: ProjectCardProps) {
 
-    const {data: artifactReport} = useQuery({
+    const {data: artifactReport, isLoading: isArtifactLoading} = useQuery({
         queryKey: ['artifactReport', gitProject.id, artifactReportFocus],
         queryFn: determineArtifactRequest,
         enabled: !!gitProject.id,
@@ -30,25 +30,10 @@ export default function ProjectCard({gitProject, artifactReportFocus}: ProjectCa
         }
     }
 
-    function getSeverityClass(severity: string) {
-        switch (severity?.toLowerCase()) {
-            case "critical":
-                return styles.severityCritical;
-            case "high":
-                return styles.severityHigh;
-            case "medium":
-                return styles.severityMedium;
-            case "low":
-                return styles.severityLow;
-            default:
-                return styles.severityDefault;
-        }
-    }
-
     return (
-        <div className={`${styles.card} ${artifactReport?.severity ? getSeverityClass(artifactReport.severity) : ""}`}>
+        <div className={styles.card}>
             <Link
-                className={styles.projectLink}
+                className={styles.projectTitle}
                 to={`/project/${gitProject.id}`}>
 
                 <div className={styles.projectName}>
@@ -57,17 +42,8 @@ export default function ProjectCard({gitProject, artifactReportFocus}: ProjectCa
                     )}
                     <div className={styles.projectName}> {gitProject.name}</div>
                 </div>
-                {artifactReport?.severity ? (
-                        <div>
-                            {artifactReport.severity ?? "Unknown"}
-                        </div>) :
-
-                    (
-                        <div className={styles.unknownSeverity}>
-                            <img src={question_mark} alt="Unknown Severity"/>
-                        </div>)
-                }
             </Link>
+            <VulnerabilityCardSection isLoading={isArtifactLoading} artifactReport={artifactReport?? undefined}/>
             <div className={styles.externalLinks}>
                 <div className={styles.iconContainer}>
                     <a

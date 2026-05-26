@@ -31,6 +31,12 @@ public class NomadController {
         return nomadService.getFromProjectName(projectName);
     }
 
+    @Get("/job/prod")
+    Mono<NomadJob> getProdNomadJob(HttpRequest<?> httpRequest, @QueryValue String projectName){
+
+        return nomadService.getProdJobsFromProjectName(projectName);
+    }
+
     @Get("/job/{jobId}")
     Mono<NomadJob> getNomadJob(@PathVariable String jobId){
         return nomadService.getJob(jobId);

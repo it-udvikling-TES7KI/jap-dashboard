@@ -51,7 +51,7 @@ export default function ProjectDashboard() {
 
     return (
         <div>
-            <h1 className={styles.header}>Project Dashboard</h1>
+            <h1 className={styles.header}>JAP Dashboard</h1>
             <ArtifactReportNavbar activeTab={activeTab} setActiveTab={setActiveTab}></ArtifactReportNavbar>
             <div className={styles.page}>
                 <div className={styles.grid}>

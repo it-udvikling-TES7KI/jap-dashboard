@@ -5,6 +5,7 @@ import {NomadSection} from "./nomad/NomadSection.tsx";
 import {ArtifactReportSection} from "./harbor/ArtifactReportSection.tsx";
 import {useQuery} from "@tanstack/react-query";
 import {fetchGitlabProjectById} from "../../hooks/GitlabHook.ts";
+import DocSection from "./docs/DocsSection.tsx";
 
 export default function Project() {
 
@@ -23,7 +24,7 @@ export default function Project() {
         enabled: !!projectId
     })
 
-    if(error){
+    if (error) {
         return <div>Error fetching project data: {error.message}</div>;
     }
 
@@ -35,7 +36,10 @@ export default function Project() {
         <div className={styles.container}>
             <h1 className={styles.projectName}>{gitlabProject?.name}</h1>
             <div className={styles.sections}>
-                <ArtifactReportSection projectId={projectIdNumber}/>
+                <div className={styles.doubleSection}>
+                    <DocSection projectName={gitlabProject.name}/>
+                    <ArtifactReportSection projectId={projectIdNumber}/>
+                </div>
                 <NomadSection projectId={projectIdNumber} projectName={gitlabProject?.name}/>
             </div>
         </div>
