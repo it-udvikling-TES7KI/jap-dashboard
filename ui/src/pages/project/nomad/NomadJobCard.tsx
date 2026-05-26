@@ -25,14 +25,13 @@ export default function NomadJobCard({projectId, nomadJob}: NomadJobCardProps) {
         <div className={styles.jobCard}>
             <a href={nomadJob.nomadLink} target="_blank" rel="noopener noreferrer" className={styles.cardHeader}>
                 <div className={styles.jobName}>{nomadJob.name}</div>
-                <div className={styles.iconContainer}>
+                <div className={styles.nomadIconContainer}>
                     <img src={nomad_icon} alt="Nomad Logo"/>
                 </div>
                 <div className={styles.jobStatus}>
                     Nomad Status: <strong> {nomadJob.nomadStatus || "unknown"} </strong>
                 </div>
             </a>
-
             <a
                 href={nomadJob.serviceLink}
                 target="_blank"
@@ -48,19 +47,29 @@ export default function NomadJobCard({projectId, nomadJob}: NomadJobCardProps) {
                     Health status: <strong> {nomadJob.healthStatus || "unknown"} </strong>
                 </a>
             </a>
-
-            <div className={styles.externalLinks}>
-
-                {gitCommit?.gitlabLink && (
-                    <a
-                        href={gitCommit?.gitlabLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={styles.iconContainer}
-                    >
-                        <img src={gitlab_icon} alt="Gitlab logo"/>
-                    </a>
-                )}
+            <div className={styles.bottomSection}>
+                <div className={styles.commitContainer}>
+                    {gitCommit?.gitlabLink && (
+                        <a
+                            href={gitCommit?.gitlabLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={styles.iconContainer}
+                        >
+                            <img src={gitlab_icon} alt="Gitlab logo"/>
+                        </a>
+                    )}
+                    <div className={styles.commitInfo}>
+                        {gitCommit ? (
+                            <>
+                                <span className={styles.commitAuthor}>{gitCommit.authorEmail} - {gitCommit.createdAt}</span>
+                                <span className={styles.commitTitle}>{gitCommit.title}</span>
+                            </>
+                        ) : (
+                            <span className={styles.commitFallback}>No commit information available</span>
+                        )}
+                    </div>
+                </div>
                 <a
                     href={nomadJob.logscaleLink}
                     target="_blank"

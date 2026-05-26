@@ -22,7 +22,8 @@ public class GitlabClientDTOs {
         @JsonProperty("short_id") String shortId,
         @JsonProperty("created_at") OffsetDateTime createdAt,
         @JsonProperty("web_url") String link,
-        String title
+        String title,
+        @JsonProperty("author_email") String authorEmail
     ) {
     }
 

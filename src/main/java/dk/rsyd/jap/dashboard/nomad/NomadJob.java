@@ -39,57 +39,47 @@ public record NomadJob(
     }
 
     private static String resolveGitSha(NomadClientDTOs.NomadJob nomadJob) {
-        if (nomadJob.meta() != null && nomadJob.meta().gitSha() != null && !nomadJob.meta().gitSha().isBlank()) {
+        if (nomadJob.meta() != null
+            && nomadJob.meta().gitSha() != null
+            && !nomadJob.meta().gitSha().isBlank()) {
             return nomadJob.meta().gitSha();
         }
 
+        //When deploy is done from tag, the sha is a bit more complex to find
         String image = extractImage(nomadJob);
         return extractGitShaFromImage(image);
     }
 
     private static String extractImage(NomadClientDTOs.NomadJob nomadJob) {
-        if (nomadJob.taskGroups() == null || nomadJob.taskGroups().isEmpty()) {
-            return null;
-        }
+        if (nomadJob.taskGroups() == null || nomadJob.taskGroups().isEmpty()) return null;
+        var group = nomadJob.taskGroups().getFirst();
 
-        var firstGroup = nomadJob.taskGroups().getFirst();
-        if (firstGroup.tasks() == null || firstGroup.tasks().isEmpty()) {
-            return null;
-        }
+        if (group.tasks() == null || group.tasks().isEmpty()) return null;
+        var task = group.tasks().getFirst();
 
-        var firstTask = firstGroup.tasks().getFirst();
-        if (firstTask.config() == null) {
-            return null;
-        }
-
-        return firstTask.config().image();
+        return task.config() != null ? task.config().image() : null;
     }
 
     private static String extractGitShaFromImage(String image) {
-        if (image == null || image.isBlank()) {
-            return null;
-        }
+        if (image == null || image.isBlank()) return null;
 
-        String normalized = image.trim();
-
-        // Remove wrapping quotes if present
-        if (normalized.length() >= 2 && normalized.startsWith("\"") && normalized.endsWith("\"")) {
-            normalized = normalized.substring(1, normalized.length() - 1);
-        }
-
+        String normalized = image.trim().replace("\"", "");
         int colonIndex = normalized.lastIndexOf(':');
-        if (colonIndex < 0 || colonIndex == normalized.length() - 1) {
-            return null;
-        }
 
-        return normalized.substring(colonIndex + 1);
+        return colonIndex >= 0 && colonIndex < normalized.length() - 1
+            ? normalized.substring(colonIndex + 1)
+            : null;
     }
 
     private static String findNomadLink(String name) {
         return "https://nomad.rsyd.net/ui/jobs/" + name + "@jap";
     }
 
-    private static String findHealthURL(String serviceLink) { return serviceLink + "/health"; }
+    private static String findHealthURL(String serviceLink) {
+        return serviceLink + "/health";
+    }
 
-    private static String findDocsURL(String serviceLink) { return serviceLink + "/docs"; }
+    private static String findDocsURL(String serviceLink) {
+        return serviceLink + "/docs";
+    }
 }

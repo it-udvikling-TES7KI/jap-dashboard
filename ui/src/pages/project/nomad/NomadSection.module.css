@@ -33,10 +33,10 @@
     gap: 0.5rem;
     background: #1d9467;
     align-items: center;
+}
 
-    .iconContainer {
-        width: 100px;
-    }
+.nomadIconContainer {
+    width: 100px;
 }
 
 .jobName {
@@ -73,25 +73,63 @@
     color: inherit;
 }
 
-.externalLinks {
+.commitContainer {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 5px;
+}
+
+.commitInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.75rem 1rem;
+    border-top: 1px solid #eee;
+    background: #fafafa;
+}
+
+.commitAuthor {
+    font-size: 0.78rem;
+    color: #6b7280;
+    word-break: break-all;
+}
+
+.commitTitle {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: #1f2937;
+    line-height: 1.35;
+}
+
+.commitFallback {
+    font-size: 0.85rem;
+    color: #9ca3af;
+    font-style: italic;
+}
+
+.bottomSection {
     display: flex;
     align-items: center;
     overflow: hidden;
+    justify-content: space-between;
+    padding: 5px;
+}
 
-    .iconContainer {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 5px;
-        width: 32px;
-        height: 32px;
-    }
+.iconContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 5px;
+    width: 32px;
+    height: 32px;
+}
 
-    .iconContainer:hover {
-        background: #ddd;
-        cursor: pointer;
-    }
+.iconContainer:hover {
+    background: #ddd;
+    cursor: pointer;
 }
 

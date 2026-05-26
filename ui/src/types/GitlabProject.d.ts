@@ -1,13 +1,15 @@
 export interface GitlabProject {
-    id:number;
+    id: number;
     name: string;
     projectGroupPath: string;
     gitlabLink: string;
 }
 
 export interface GitlabCommit {
-    id:number;
+    id: number;
     shortId: string;
     title: string;
     gitlabLink: string;
+    authorEmail: string;
+    createdAt: string;
 }

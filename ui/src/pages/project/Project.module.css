@@ -2,6 +2,25 @@
     padding: 1rem;
 }
 
+.header{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 1rem;
+}
+
+.iconContainer{
+    height: 35px;
+    width: 35px;
+    padding: 10px;
+    border-radius: 50%;
+}
+
+.iconContainer:hover {
+    box-shadow: 0 2px 8px rgb(117 180 227);
+    cursor: pointer;
+}
+
 .projectName{
     text-transform: capitalize;
 }
@@ -21,6 +40,7 @@
 .docSection {
     min-height: 500px;
     display: flex;
+    flex-direction: column;
     flex: 1;
 }
 

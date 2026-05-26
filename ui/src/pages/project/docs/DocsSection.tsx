@@ -23,6 +23,13 @@ export default function DocSection({projectName}: DocSection) {
                         className={styles.iframe}
                         src={prodNomadJob.docsURL}
                     />
+                    <a
+                        href={prodNomadJob.docsURL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        Go to Docs
+                    </a>
                 </div>
             ) : (
                 <span> No Prod Job could be found</span>
