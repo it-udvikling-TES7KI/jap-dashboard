@@ -5,6 +5,9 @@ import dk.rsyd.jap.dashboard.harbor.artifactReport.ArtifactReportService;
 import dk.rsyd.jap.dashboard.harbor.client.HarborClient;
 import dk.rsyd.jap.dashboard.harbor.client.HarborClientDTOs;
 import io.micronaut.http.HttpRequest;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.MutableHttpHeaders;
+import io.micronaut.http.MutableHttpResponse;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
@@ -33,17 +36,21 @@ public class HarborController {
 
 
     @Get("/project/{projectId}/artifactReport/latestMasterCommit")
-    Mono<ArtifactReport> getArtifactReportFromLatestMasterCommit(HttpRequest<?> httpRequest, @PathVariable int projectId){
+    Mono<MutableHttpResponse<ArtifactReport>> getArtifactReportFromLatestMasterCommit(HttpRequest<?> httpRequest, @PathVariable int projectId){
         LOG.info("method={}, endpoint={}", httpRequest.getMethod(), httpRequest.getUri());
 
-        return artifactReportService.getArtifactReportFromLatestMasterCommit(projectId);
+        return artifactReportService.getArtifactReportFromLatestMasterCommit(projectId)
+            .map(HttpResponse::ok)
+            .defaultIfEmpty(HttpResponse.noContent());
     }
 
     @Get("/project/{projectId}/artifactReport/latestProdDeploy")
-    Mono<ArtifactReport> getArtifactReportFromLatestProdDeploy(HttpRequest<?> httpRequest, @PathVariable int projectId) {
+    Mono<MutableHttpResponse<ArtifactReport>> getArtifactReportFromLatestProdDeploy(HttpRequest<?> httpRequest, @PathVariable int projectId) {
         LOG.info("method={}, endpoint={}", httpRequest.getMethod(), httpRequest.getUri());
 
-        return artifactReportService.getArtifactReportFromLatestProdDeploy(projectId);
+        return artifactReportService.getArtifactReportFromLatestProdDeploy(projectId)
+            .map(HttpResponse::ok)
+            .defaultIfEmpty(HttpResponse.noContent());
     }
 
     //todo not in use

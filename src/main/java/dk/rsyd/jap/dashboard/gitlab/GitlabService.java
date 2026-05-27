@@ -1,6 +1,8 @@
 package dk.rsyd.jap.dashboard.gitlab;
 
 import jakarta.inject.Singleton;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -8,6 +10,8 @@ import java.util.Objects;
 
 @Singleton
 public class GitlabService {
+
+    private static final Logger LOG = LogManager.getLogger(GitlabService.class);
 
     private final GitlabClient gitlabClient;
 
@@ -35,10 +39,11 @@ public class GitlabService {
      * @param gitId
      * @return
      */
-    public Mono<GitlabClientDTOs.Commit> fetchCommitFromPrimaryBranch(int gitId) {
+    public Mono<Commit> fetchCommitFromPrimaryBranch(int gitId) {
         return gitlabClient.fetchCommitsFromMasterBranch(gitId)
             .switchIfEmpty(gitlabClient.fetchCommitsFromMainBranch(gitId))
-            .next();
+            .next()
+            .map(Commit::fromDTO);
     }
 
     public Mono<GitlabProject> getProject(int projectId) {

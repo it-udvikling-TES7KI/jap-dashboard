@@ -1,6 +1,8 @@
 package dk.rsyd.jap.dashboard.nomad;
 
 import io.micronaut.http.HttpRequest;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.MutableHttpResponse;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
@@ -25,20 +27,23 @@ public class NomadController {
     }
 
     @Get("/jobs")
-    Flux<NomadJob> getNomadJobsFromProjectName(HttpRequest<?> httpRequest, @QueryValue String projectName){
+    Flux<NomadJob> getNomadJobsFromProjectName(HttpRequest<?> httpRequest, @QueryValue String projectName) {
         LOG.info("method={}, endpoint={}", httpRequest.getMethod(), httpRequest.getUri());
 
         return nomadService.getFromProjectName(projectName);
     }
 
     @Get("/job/prod")
-    Mono<NomadJob> getProdNomadJob(HttpRequest<?> httpRequest, @QueryValue String projectName){
+    Mono<MutableHttpResponse<NomadJob>> getProdNomadJob(HttpRequest<?> httpRequest, @QueryValue String projectName) {
+        LOG.info("method={}, endpoint={}", httpRequest.getMethod(), httpRequest.getUri());
 
-        return nomadService.getProdJobsFromProjectName(projectName);
+        return nomadService.getProdJobFromProjectName(projectName)
+            .map(HttpResponse::ok)
+            .defaultIfEmpty(HttpResponse.noContent());
     }
 
     @Get("/job/{jobId}")
-    Mono<NomadJob> getNomadJob(@PathVariable String jobId){
+    Mono<NomadJob> getNomadJob(@PathVariable String jobId) {
         return nomadService.getJob(jobId);
     }
 }

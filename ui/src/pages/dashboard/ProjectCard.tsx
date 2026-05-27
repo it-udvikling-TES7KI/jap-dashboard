@@ -19,6 +19,9 @@ export default function ProjectCard({gitProject, artifactReportFocus}: ProjectCa
         queryKey: ['artifactReport', gitProject.id, artifactReportFocus],
         queryFn: determineArtifactRequest,
         enabled: !!gitProject.id,
+        retry: (failureCount) => {
+            return failureCount < 1;
+        }
     })
 
     function determineArtifactRequest() {

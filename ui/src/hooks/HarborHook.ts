@@ -8,11 +8,6 @@ export async function fetchArtifactReportFromLatestMasterCommit(projectId: numbe
     }
     const response = await fetch(harborUrl + 'project/' + projectId + '/artifactReport/latestMasterCommit', options)
 
-    // 404 is an expected "no report" state
-    if (response.status === 404) {
-        return null;
-    }
-
     if (!response.ok) {
         throw new Error(`Failed to fetch artifact report: ${response.status} ${response.statusText}`);
     }
@@ -24,11 +19,6 @@ export async function fetchArtifactReportFromLatestProdDeploy(projectId: number)
         method: 'GET',
     }
     const response = await fetch(harborUrl + 'project/' + projectId + '/artifactReport/latestProdDeploy', options)
-
-    // 404 is an expected "no report" state
-    if (response.status === 404) {
-        return null;
-    }
 
     if (!response.ok) {
         throw new Error(`Failed to fetch artifact report: ${response.status} ${response.statusText}`);

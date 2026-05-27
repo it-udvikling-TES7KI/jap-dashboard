@@ -1,6 +1,6 @@
 package dk.rsyd.jap.dashboard.harbor.artifactReport;
 
-import dk.rsyd.jap.dashboard.gitlab.GitlabClientDTOs;
+import dk.rsyd.jap.dashboard.gitlab.Commit;
 import dk.rsyd.jap.dashboard.harbor.client.HarborClientDTOs;
 import io.micronaut.serde.annotation.Serdeable;
 
@@ -25,7 +25,7 @@ public record ArtifactReport(
         return "https://harbor.rsyd.net/harbor/projects/5/repositories/" + projectName.toLowerCase().replace(" ", "-");
     }
 
-    public static ArtifactReport of(String projectName, GitlabClientDTOs.Commit commit, HarborClientDTOs.ScanReport scanReport, String digest) {
+    public static ArtifactReport of(String projectName, Commit commit, HarborClientDTOs.ScanReport scanReport, String digest) {
         String repositoryLink = getRepositoryLink(projectName);
         // TODO: move to config?
         String artifactLink = repositoryLink + "/artifacts-tab/artifacts/" + digest;
@@ -36,7 +36,7 @@ public record ArtifactReport(
         return new ArtifactReport(
             repositoryLink,
             commit.shortId(),
-            commit.link(),
+            commit.gitlabLink(),
             artifactLink,
             scanReport.severity(),
             vulnerabilityCounts.critical(),
@@ -48,11 +48,11 @@ public record ArtifactReport(
         );
     }
 
-    public static ArtifactReport WithNoArtifactInfo(String projectName, GitlabClientDTOs.Commit commit) {
+    public static ArtifactReport WithNoArtifactInfo(String projectName, Commit commit) {
         return new ArtifactReport(
             getRepositoryLink(projectName),
             commit.shortId(),
-            commit.link(),
+            commit.gitlabLink(),
             null,
             null,
             0,
