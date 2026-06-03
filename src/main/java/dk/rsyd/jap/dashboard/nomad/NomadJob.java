@@ -52,10 +52,10 @@ public record NomadJob(
 
     private static String extractImage(NomadClientDTOs.NomadJob nomadJob) {
         if (nomadJob.taskGroups() == null || nomadJob.taskGroups().isEmpty()) return null;
-        var group = nomadJob.taskGroups().getFirst();
+        NomadClientDTOs.TaskGroup group = nomadJob.taskGroups().getFirst();
 
         if (group.tasks() == null || group.tasks().isEmpty()) return null;
-        var task = group.tasks().getFirst();
+        NomadClientDTOs.Task task = group.tasks().getFirst();
 
         return task.config() != null ? task.config().image() : null;
     }

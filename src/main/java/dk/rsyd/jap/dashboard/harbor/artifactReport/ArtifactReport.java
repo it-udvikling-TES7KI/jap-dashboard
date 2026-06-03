@@ -21,8 +21,8 @@ public record ArtifactReport(
 
     public static ArtifactReport of(String repositoryURL, Commit commit, String artifactURL, HarborClientDTOs.ScanReport scanReport) {
 
-        var scanSummary = scanReport.summary();
-        var vulnerabilityCounts = scanSummary.counts();
+        HarborClientDTOs.ScanSummary scanSummary = scanReport.summary();
+        HarborClientDTOs.VulnerabilityCounts vulnerabilityCounts = scanSummary.counts();
 
         return new ArtifactReport(
             repositoryURL,
