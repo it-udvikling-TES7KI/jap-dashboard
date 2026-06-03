@@ -7,7 +7,7 @@ public record GitlabProject(
     int id,
     String name,
     String projectGroupPath,
-    String gitlabLink) {
+    String gitlabURL) {
 
 
     public static GitlabProject fromJapNameSpace(GitlabClientDTOs.GitlabProject dto) {
@@ -18,6 +18,6 @@ public record GitlabProject(
     String trailRemoved = afterJap.replaceAll("\\s*/\\s*$", "");
     // Remove only the last occurrence of the project name - in case projectgroup shares the name
     String projectGroup = trailRemoved.replaceFirst("\\s*/?\\s*" + java.util.regex.Pattern.quote(dto.name()) + "\\s*$", "");
-    return new GitlabProject(dto.id(), dto.name(), projectGroup, dto.gitlabLink());
+    return new GitlabProject(dto.id(), dto.name(), projectGroup, dto.gitlabUrl());
 }
 }

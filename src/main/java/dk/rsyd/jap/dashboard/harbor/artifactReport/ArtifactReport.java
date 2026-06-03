@@ -4,13 +4,12 @@ import dk.rsyd.jap.dashboard.gitlab.Commit;
 import dk.rsyd.jap.dashboard.harbor.client.HarborClientDTOs;
 import io.micronaut.serde.annotation.Serdeable;
 
-//todo split or refactor
 @Serdeable
 public record ArtifactReport(
-    String repositoryLink,
+    String repositoryURL,
     String commitShortId,
-    String commitLink,
-    String artifactLink,
+    String commitURL,
+    String artifactURL,
     String severity,
     int critical,
     int high,
@@ -20,24 +19,16 @@ public record ArtifactReport(
     int fixable
 ) {
 
-    private static String getRepositoryLink(String projectName) {
-        // TODO: move to config?
-        return "https://harbor.rsyd.net/harbor/projects/5/repositories/" + projectName.toLowerCase().replace(" ", "-");
-    }
-
-    public static ArtifactReport of(String projectName, Commit commit, HarborClientDTOs.ScanReport scanReport, String digest) {
-        String repositoryLink = getRepositoryLink(projectName);
-        // TODO: move to config?
-        String artifactLink = repositoryLink + "/artifacts-tab/artifacts/" + digest;
+    public static ArtifactReport of(String repositoryURL, Commit commit, String artifactURL, HarborClientDTOs.ScanReport scanReport) {
 
         var scanSummary = scanReport.summary();
         var vulnerabilityCounts = scanSummary.counts();
 
         return new ArtifactReport(
-            repositoryLink,
+            repositoryURL,
             commit.shortId(),
-            commit.gitlabLink(),
-            artifactLink,
+            commit.gitlabURL(),
+            artifactURL,
             scanReport.severity(),
             vulnerabilityCounts.critical(),
             vulnerabilityCounts.high(),
@@ -48,11 +39,11 @@ public record ArtifactReport(
         );
     }
 
-    public static ArtifactReport WithNoArtifactInfo(String projectName, Commit commit) {
+    public static ArtifactReport WithNoArtifactInfo(String repositoryURL, Commit commit) {
         return new ArtifactReport(
-            getRepositoryLink(projectName),
+            repositoryURL,
             commit.shortId(),
-            commit.gitlabLink(),
+            commit.gitlabURL(),
             null,
             null,
             0,

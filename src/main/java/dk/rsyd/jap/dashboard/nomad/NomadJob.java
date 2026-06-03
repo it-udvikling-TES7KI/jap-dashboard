@@ -7,20 +7,20 @@ public record NomadJob(
     String id,
     String name,
     String gitCommit,
-    String serviceLink,
+    String serviceURL,
     String nomadStatus,
     String healthStatus,
     String healthURL,
-    String nomadLink,
-    String logscaleLink,
+    String nomadURL,
+    String logscaleURL,
     String docsURL
 ) {
 
     public static NomadJob fromDTO(
         NomadClientDTOs.NomadJob nomadJob,
-        String serviceLink,
+        String serviceURL,
         String healthStatus,
-        String logscaleLink
+        String logscaleURL
     ) {
         String gitSha = resolveGitSha(nomadJob);
 
@@ -28,13 +28,13 @@ public record NomadJob(
             nomadJob.id(),
             nomadJob.name(),
             gitSha,
-            serviceLink,
+            serviceURL,
             nomadJob.status(),
             healthStatus,
-            findHealthURL(serviceLink),
-            findNomadLink(nomadJob.name()),
-            logscaleLink,
-            findDocsURL(serviceLink)
+            findHealthURL(serviceURL),
+            findNomadURL(nomadJob.name()),
+            logscaleURL,
+            findDocsURL(serviceURL)
         );
     }
 
@@ -71,15 +71,15 @@ public record NomadJob(
             : null;
     }
 
-    private static String findNomadLink(String name) {
+    private static String findNomadURL(String name) {
         return "https://nomad.rsyd.net/ui/jobs/" + name + "@jap";
     }
 
-    private static String findHealthURL(String serviceLink) {
-        return serviceLink + "/health";
+    private static String findHealthURL(String serviceURL) {
+        return serviceURL + "/health";
     }
 
-    private static String findDocsURL(String serviceLink) {
-        return serviceLink + "/docs";
+    private static String findDocsURL(String serviceURL) {
+        return serviceURL + "/docs";
     }
 }

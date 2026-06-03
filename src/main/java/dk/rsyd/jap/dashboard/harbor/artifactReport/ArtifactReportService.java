@@ -30,7 +30,7 @@ public class ArtifactReportService {
                     .flatMap(latestCommit ->
                         getArtifactReport(gitlabProject.name(), latestCommit)
                             .defaultIfEmpty(
-                                ArtifactReport.WithNoArtifactInfo(gitlabProject.name(), latestCommit)
+                                ArtifactReport.WithNoArtifactInfo(makeRepositoryURL(gitlabProject.name()), latestCommit)
                             )))
             .doOnError(LOG::error);
     }
@@ -44,7 +44,7 @@ public class ArtifactReportService {
                             .findCommitFromShortId(projectId, nomadJob.gitCommit())
                             .flatMap(commit -> getArtifactReport(gitlabProject.name(), commit)
                                 .defaultIfEmpty(
-                                    ArtifactReport.WithNoArtifactInfo(gitlabProject.name(), commit)
+                                    ArtifactReport.WithNoArtifactInfo(makeRepositoryURL(gitlabProject.name()), commit)
                                 ))
                     ))
             .doOnError(LOG::error);
@@ -60,7 +60,7 @@ public class ArtifactReportService {
                 harborArtifact.scanOverview()
                     .values().stream().findFirst()
                     .map(scanReport -> Mono.just(
-                        ArtifactReport.of(projectName, commit, scanReport, harborArtifact.digest())))
+                        ArtifactReport.of(makeRepositoryURL(projectName), commit, makeArtifactURL(projectName, harborArtifact.digest()), scanReport)))
                     .orElseGet(Mono::empty)
             )
             .onErrorResume(e -> handleNotFoundError(projectName, e));
@@ -79,6 +79,17 @@ public class ArtifactReportService {
             LOG.error("Error fetching artifact: {}", e.getMessage(), e);
         }
         return Mono.error(e);
+    }
+
+    private static final String HARBOR_REPO_BASE_URL = "https://harbor.rsyd.net/harbor/projects/5/repositories/%s";
+    private static final String HARBOR_REPO_ARTIFACT_URL = "https://harbor.rsyd.net/harbor/projects/5/repositories/%s/artifacts-tab/artifacts/%s";
+
+    private static String makeRepositoryURL(String projectName) {
+        return String.format(HARBOR_REPO_BASE_URL, projectName.toLowerCase().replace(" ", "-"));
+    }
+
+    private static String makeArtifactURL(String projectName, String digest) {
+        return String.format(HARBOR_REPO_ARTIFACT_URL, projectName.toLowerCase().replace(" ", "-"), digest);
     }
 
 }

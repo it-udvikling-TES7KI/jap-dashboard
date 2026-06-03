@@ -64,7 +64,7 @@ export function ArtifactReportSection({projectId}: ArtifactReportSectionProps) {
                         <div className={styles.artifactContainer}>
                             <div className={styles.detailsContainer}>
                                 <a className={styles.reportInfo}
-                                   href={focusedArtifactReport.commitLink}
+                                   href={focusedArtifactReport.commitURL}
                                    target="_blank"
                                    rel="noopener noreferrer">
                                     <div className={styles.iconContainer}>
@@ -80,7 +80,7 @@ export function ArtifactReportSection({projectId}: ArtifactReportSectionProps) {
                                 {focusedArtifactReport.severity ? (
                                         <div className={styles.artifactDetails}>
                                             <a className={styles.reportInfo}
-                                               href={focusedArtifactReport.artifactLink}
+                                               href={focusedArtifactReport.artifactURL}
                                                target="_blank"
                                                rel="noopener noreferrer">
                                                 <div className={styles.iconContainer}>

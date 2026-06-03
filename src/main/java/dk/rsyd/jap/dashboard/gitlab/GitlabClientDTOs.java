@@ -13,7 +13,7 @@ public class GitlabClientDTOs {
         @JsonProperty("id") int id,
         @JsonProperty("name") String name,
         @JsonProperty("name_with_namespace") String nameWithNamespace,
-        @JsonProperty("web_url") String gitlabLink) {
+        @JsonProperty("web_url") String gitlabUrl) {
     }
 
     @Serdeable
@@ -21,7 +21,7 @@ public class GitlabClientDTOs {
         String id,
         @JsonProperty("short_id") String shortId,
         @JsonProperty("created_at") OffsetDateTime createdAt,
-        @JsonProperty("web_url") String link,
+        @JsonProperty("web_url") String url,
         String title,
         @JsonProperty("author_email") String authorEmail
     ) {

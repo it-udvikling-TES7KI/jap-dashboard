@@ -2,11 +2,11 @@ export interface NomadJob {
     id: string;
     name: string;
     gitCommit: string;
-    serviceLink: string;
-    nomadLink: string;
+    serviceURL: string;
+    nomadURL: string;
     nomadStatus: string;
     healthStatus: string;
     healthURL: string;
-    logscaleLink: string;
+    logscaleURL: string;
     docsURL: string;
 }

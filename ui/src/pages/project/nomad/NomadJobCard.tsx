@@ -23,7 +23,7 @@ export default function NomadJobCard({projectId, nomadJob}: NomadJobCardProps) {
 
     return (
         <div className={styles.jobCard}>
-            <a href={nomadJob.nomadLink} target="_blank" rel="noopener noreferrer" className={styles.cardHeader}>
+            <a href={nomadJob.nomadURL} target="_blank" rel="noopener noreferrer" className={styles.cardHeader}>
                 <div className={styles.jobName}>{nomadJob.name}</div>
                 <div className={styles.nomadIconContainer}>
                     <img src={nomad_icon} alt="Nomad Logo"/>
@@ -33,12 +33,12 @@ export default function NomadJobCard({projectId, nomadJob}: NomadJobCardProps) {
                 </div>
             </a>
             <a
-                href={nomadJob.serviceLink}
+                href={nomadJob.serviceURL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={styles.serviceLinkContainer}
             >
-                <span className={styles.serviceLink}> {nomadJob.serviceLink} </span>
+                <span className={styles.serviceLink}> {nomadJob.serviceURL} </span>
                 <a className={styles.jobStatus}
                    href={nomadJob.healthURL}
                    target="_blank"
@@ -49,9 +49,9 @@ export default function NomadJobCard({projectId, nomadJob}: NomadJobCardProps) {
             </a>
             <div className={styles.bottomSection}>
                 <div className={styles.commitContainer}>
-                    {gitCommit?.gitlabLink && (
+                    {gitCommit?.gitlabURL && (
                         <a
-                            href={gitCommit?.gitlabLink}
+                            href={gitCommit?.gitlabURL}
                             target="_blank"
                             rel="noopener noreferrer"
                             className={styles.iconContainer}
@@ -71,7 +71,7 @@ export default function NomadJobCard({projectId, nomadJob}: NomadJobCardProps) {
                     </div>
                 </div>
                 <a
-                    href={nomadJob.logscaleLink}
+                    href={nomadJob.logscaleURL}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={styles.iconContainer}

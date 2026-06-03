@@ -1,8 +1,8 @@
 export interface ArtifactReport {
-    repositoryLink: string;
-    artifactLink: string;
+    repositoryURL: string;
+    artifactURL: string;
     commitShortId: string;
-    commitLink: string;
+    commitURL: string;
     severity: string;
     critical: number;
     high: number;

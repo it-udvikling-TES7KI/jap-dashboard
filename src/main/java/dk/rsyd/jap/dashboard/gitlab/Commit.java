@@ -9,12 +9,12 @@ public record Commit(
     String id,
     String shortId,
     String title,
-    String gitlabLink,
+    String gitlabURL,
     String authorEmail,
     LocalDateTime createdAt
 ) {
     public static Commit fromDTO(GitlabClientDTOs.Commit commit) {
-        return new Commit(commit.id(), commit.shortId(), commit.title(), commit.link(), commit.authorEmail(), commit.createdAt().toLocalDateTime());
+        return new Commit(commit.id(), commit.shortId(), commit.title(), commit.url(), commit.authorEmail(), commit.createdAt().toLocalDateTime());
     }
 
 }

@@ -50,16 +50,16 @@ export default function ProjectCard({gitProject, artifactReportFocus}: ProjectCa
             <div className={styles.externalLinks}>
                 <div className={styles.iconContainer}>
                     <a
-                        href={gitProject.gitlabLink}
+                        href={gitProject.gitlabURL}
                         target="_blank"
                         rel="noopener noreferrer">
                         <img src={gitlab_icon} alt="Gitlab Logo"/>
                     </a>
                 </div>
-                {artifactReport?.repositoryLink && (
+                {artifactReport?.repositoryURL && (
                     <div className={styles.iconContainer}>
                         <a
-                            href={artifactReport.repositoryLink}
+                            href={artifactReport.repositoryURL}
                             target="_blank"
                             rel="noopener noreferrer">
                             <img
