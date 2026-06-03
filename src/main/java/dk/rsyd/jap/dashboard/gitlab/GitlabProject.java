@@ -24,7 +24,6 @@ public record GitlabProject(
         // Remove the trailing /
         String trailRemoved = afterJap.replaceAll("\\s*/\\s*$", "");
         // Remove only the last occurrence of the project name - in case projectgroup shares the name
-
         return trailRemoved.replaceFirst("\\s*/?\\s*" + quote(name) + "\\s*$", "");
     }
 

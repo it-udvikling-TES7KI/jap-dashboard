@@ -18,10 +18,6 @@ import static io.micronaut.http.HttpHeaders.USER_AGENT;
 public interface NomadClient {
 
     @Header(name = ACCEPT, value = MediaType.APPLICATION_JSON_STREAM)
-    @Get("/v1/jobs?namespace=jap")
-    Flux<NomadClientDTOs.NomadJobSimple> fetchJapJobs();
-
-    @Header(name = ACCEPT, value = MediaType.APPLICATION_JSON_STREAM)
     @Get("/v1/jobs?namespace=jap&filter={filter}")
     Flux<NomadClientDTOs.NomadJobSimple> fetchJobsWithFilter(@QueryValue("filter") String filter);
 
