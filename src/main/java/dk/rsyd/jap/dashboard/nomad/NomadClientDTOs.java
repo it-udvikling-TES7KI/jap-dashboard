@@ -85,7 +85,6 @@ public record NomadClientDTOs() {
         @JsonProperty("Tags")
         List<String> tags
     ) {
-        //todo revisit
         private static final Pattern TRAEFIK_HOST_RULE_PATTERN =
             Pattern.compile("^traefik\\.http\\.routers\\.[^.]+\\.rule=Host\\(`([^`]+)`\\)$");
 

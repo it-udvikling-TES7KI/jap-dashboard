@@ -37,7 +37,7 @@ micronaut:
       prior-to-login: true #This ensures that the browser will be redirected back to originating page
       enabled: true
     session:
-      enabled: false #Not sure i have anny effect to enable this
+      enabled: false
 ---
 micronaut:
   security:
@@ -53,7 +53,7 @@ micronaut:
         signatures:
           secret:
             generator:
-              secret: ${JWT_SECRET:`pleaseChangeThisSecretForANewOne`} #TODO Rest the value. Current value is taken from demo
+              secret: ${JWT_SECRET:`pleaseChangeThisSecretForANewOne`}
         cookie:
           enabled: true
           cookie-http-only: true
