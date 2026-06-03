@@ -11,7 +11,6 @@ import static io.micronaut.http.HttpHeaders.ACCEPT;
 import static io.micronaut.http.HttpHeaders.USER_AGENT;
 
 //Todo caching
-//Todo make protected and limit access to go through Service
 @Client(id = "gitlab")
 @Header(name = USER_AGENT, value = "Micronaut HTTP Client")
 @Header(name = "PRIVATE-TOKEN", value = "${gitlab.access-token}")
@@ -34,11 +33,6 @@ public interface GitlabClient {
     @Header(name = ACCEPT, value = "application/json")
     @Get("/api/v4/projects/{projectId}/repository/commits?ref_name=main&per_page=5&page=1")
     Flux<GitlabClientDTOs.Commit> fetchCommitsFromMainBranch(@QueryValue int projectId);
-
-    //TODO perPage might need to be adjusted
-    @Header(name = ACCEPT, value = "application/json")
-    @Get("/api/v4/projects/{projectId}/jobs?scope=success&per_page=250&page=1")
-    Flux<GitlabClientDTOs.Job> fetchSuccessfulJobsFromProject(@QueryValue int projectId);
 
     @Header(name = ACCEPT, value = "application/json")
     @Get("/api/v4/projects/{projectId}/repository/commits/{sha}")

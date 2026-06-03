@@ -44,38 +44,36 @@ jap-dashboard/
 ├── src/
 │   ├── main/
 │   │   ├── java/dk/rsyd/jap/dashboard/
-│   │   │   ├── gitlab/           # GitLab integration
-│   │   │   ├── harbor/           # Harbor integration
-│   │   │   ├── nomad/            # Nomad integration
-│   │   │   ├── project/          # Project management
-│   │   │   └── Application.java  # Main entry point
+│   │   │   ├── gitlab/
+│   │   │   ├── harbor/
+│   │   │   ├── nomad/
+│   │   │   └── Application.java  # Main entry
 │   │   └── resources/
-│   │       ├── application.yml           # Default config
-│   │       ├── application-dev.yml       # Development config
-│   │       ├── application-staging.yml   # Staging config
-│   │       └── log4j2.xml               # Logging config
+│   │       ├── application.yml
+│   │       ├── application-dev.yml
+│   │       └── log4j2.xml
 │   ├── test/
-│   │   ├── java/                # Unit tests
-│   │   └── resources/           # Test configuration
-│   └── docs/asciidoc/           # Project documentation
+│   │   ├── java/
+│   │   └── resources/
+│   └── docs/asciidoc/
 ├── ui/
 │   ├── src/
-│   │   ├── components/          # React components
-│   │   ├── hooks/               # Custom React hooks
-│   │   ├── pages/               # Page components
-│   │   │   ├── dashboard/       # Dashboard pages
-│   │   │   └── project/         # Project pages
-│   │   ├── types/               # TypeScript type definitions
-│   │   └── assets/              # Images and icons
-│   ├── public/                  # Static assets
-│   ├── vite.config.js           # Vite configuration
-│   └── package.json             # Frontend dependencies
-├── gradle/                      # Gradle configuration files
-├── build.gradle                 # Main build configuration
-├── gradle.properties            # Gradle properties
-├── settings.gradle              # Gradle settings
-├── openapi.properties           # OpenAPI/Swagger config
-└── job.nomad                    # Nomad deployment descriptor
+│   │   ├── components/
+│   │   ├── hooks/
+│   │   ├── pages/
+│   │   │   ├── dashboard/
+│   │   │   └── project/
+│   │   ├── types/
+│   │   └── assets/
+│   ├── public/
+│   ├── vite.config.js
+│   └── package.json
+├── gradle/
+├── build.gradle
+├── gradle.properties
+├── settings.gradle
+├── openapi.properties
+└── job.nomad
 ----
 
 == Getting Started
