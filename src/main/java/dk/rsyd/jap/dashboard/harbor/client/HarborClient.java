@@ -16,10 +16,10 @@ public interface HarborClient {
 
     @Get(
         "projects/${harbor.project}/repositories/{projectName}/artifacts/{reference}" +
-            "?page=1" +
-            "&page_size=1" +
+            "?page=1&page_size=1" +
             "&with_tag=true&with_label=true" +
-            "&with_scan_overview=true&with_sbom_overview=true" +
+            "&with_scan_overview=true" +
+            "&with_sbom_overview=true" +
             "&with_accessory=false" +
             "&with_signature=false" +
             "&with_immutable_status=false"
