@@ -26,7 +26,7 @@ public class ArtifactReportService {
     public Mono<ArtifactReport> getArtifactReportFromLatestMasterCommit(int projectId) {
         return gitlabService.getProject(projectId)
             .flatMap(gitlabProject ->
-                gitlabService.fetchCommitFromPrimaryBranch(projectId)
+                gitlabService.fetchLatestCommitFromPrimaryBranch(projectId)
                     .flatMap(latestCommit ->
                         getArtifactReport(gitlabProject.name(), latestCommit)
                             .defaultIfEmpty(

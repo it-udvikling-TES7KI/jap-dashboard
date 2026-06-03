@@ -19,14 +19,14 @@ public class GitlabService {
     }
 
     /**
-     * Checks both Master and Main as reference.
-     *
-     * @param gitId
-     * @return
+     * Checks both Master and Main for commits.
+     * This is because both are used as default branch, depending on the project
+     * @param gitProjectId gitlab project id
+     * @return latest Commit from default branch
      */
-    public Mono<Commit> fetchCommitFromPrimaryBranch(int gitId) {
-        return gitlabClient.fetchCommitsFromMasterBranch(gitId)
-            .switchIfEmpty(gitlabClient.fetchCommitsFromMainBranch(gitId))
+    public Mono<Commit> fetchLatestCommitFromPrimaryBranch(int gitProjectId) {
+        return gitlabClient.fetchLatestCommitsFromMasterBranch(gitProjectId)
+            .switchIfEmpty(gitlabClient.fetchLatestCommitsFromMainBranch(gitProjectId))
             .next()
             .map(Commit::fromDTO);
     }

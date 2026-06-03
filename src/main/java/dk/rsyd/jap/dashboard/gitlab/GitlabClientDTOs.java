@@ -5,7 +5,6 @@ import io.micronaut.serde.annotation.Serdeable;
 
 import java.time.OffsetDateTime;
 
-
 public class GitlabClientDTOs {
 
     @Serdeable
@@ -27,12 +26,4 @@ public class GitlabClientDTOs {
     ) {
     }
 
-    @Serdeable
-    public record Job(
-        String id,
-        String stage,
-        String name,
-        String ref,
-        Commit commit) {
-    }
 }
