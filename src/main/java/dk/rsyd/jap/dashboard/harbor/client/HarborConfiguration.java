@@ -8,9 +8,7 @@ import io.micronaut.context.annotation.Requires;
 @Requires(property = HarborConfiguration.PREFIX)
 public record HarborConfiguration(
     String username,
-    String password,
-    String project
-
+    String password
 ) {
     public static final String PREFIX = "harbor";
 }

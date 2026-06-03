@@ -159,7 +159,6 @@ nomad:
 harbor:
   username: ${AD_USER}
   password: ${AD_PASSWORD}
-  project: 'jap'
 ---
 micronaut:
   http:
