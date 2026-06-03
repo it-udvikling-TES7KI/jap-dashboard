@@ -10,7 +10,7 @@ export async function fetchNomadJobsByProjectName(name: string) {
     return await response.json() as NomadJob[];
 }
 
-export async function fetchProdNomadJobsByProjectName(name: string) {
+export async function fetchProdNomadJobByProjectName(name: string) {
 
     const options = {
         method: 'GET',
