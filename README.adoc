@@ -1,203 +1,206 @@
-= Baseline projects
+= JAP Dashboard
 
-Documentation may be written in danish or english. It should match the target audience of the project.
+A dashboard for managing and monitoring JAP (Java Application Platform) services. The dashboard provides visibility into projects, artifacts, deployments, and integrations across multiple platforms.
 
-We strive to use Java, Micronaut and Gradle as our main tools.
+== Overview
 
-Folder and file layout should follow the link:https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html[Maven project structure], which Gradle have adopted.
+JAP Dashboard is a full-stack application that aggregates data from multiple services and presents it through an intuitive web interface. It enables teams to monitor project status, artifact reports, and deployments via integrations with GitLab, Harbor, Nomad, and LogScale.
 
-Projects are hosted on Gitlab therefore implicitly Source Code Management(SCM) is done with Git.
+=== Key Features
 
-Artifacts are build and deployed by using the Gitlab build in Continuous Integrations(CI) tool.
+* *Project Management*: View and manage projects with detailed information
+* *Artifact Reporting*: Track and analyze artifact reports across projects
+* *Multi-Platform Integration*:
+** GitLab: Project and activity information
+** Harbor: Container registry and artifact management
+** Nomad: Job orchestration and deployment status
+** LogScale: Log aggregation and analysis
+* *Real-time Updates*: React-based frontend with reactive data fetching
 
-Documentation is written in Asciidoc and https://docs.asciidoctor.org/asciidoc/latest/[syntax and documentation]
+== Technology Stack
 
-== Base project files and their function
-.Base layout of single project
-[source,text,linenums]
-----
-+ ProjectRoot
-|   .editorconfig  <---------- Used to control encodings and line endings of src files
-|   .gitignore  <------------- Contains files and foldes that Git should not version control
-|   .gitlab-ci.yml  <--------- Config file for GitLab build system
-|   build.gradle  <----------- Gradle top level build file
-|   CHANGELOG.adoc  <--------- Manual maintained list of significant changes to the project
-|   CVE-suppressions.xml  <--- Used to suppress know CVE's that do not affect the project
-|   gradle.properties  <------ Contains Gradle specific properties ex. dependency versions
-|   gradlew  <---------------- Linux specific file for running Gradle wrapper
-|   gradlew.bat <------------- Windows specific file for running Gradle wrapper
-|   job.nomad  <-------------- Nomad deployment descriptor.
-|   README.adoc  <------------ A project specific README. Target audience; developers
-|   settings.gradle  <-------- Contains name and structure of project. Gradle specific file
-|
-+---.idea  <------------------- Intellij project folder. Folder should not be included in SCM
-|   \                           Contains files and folders that tell Intellij how to behave.
-|
-+---.gradle  <----------------- Gradle "work dir". Folder should not be included in SCM.
-|   \                           Can be deleted. Is recreated by Gradle
-|
-+---.git  <-------------------- Git's folder. Do not delete and generally stay out.
-|   \
-|
-+---gradle  <------------------ Gradle Wrapper folder and Gradle plugin specific files
-|   |   asciidoc.gradle  <----- Configures the Asciidoc Gradle plugin
-|   |   repositories.gradle <-- Custom dependency repository settings
-|   |   docker.gradle  <------- Configures and control the creation of the Docker image
-|   |   java.gradle  <--------- Settings related to compile Java src and jar creation
-|   |
-|   \---wrapper  <------------- Gradle Wrapper Bootstrap jar and config file
-|           gradle-wrapper.jar
-|           gradle-wrapper.properties <---- Contains path to where
-|                                           the Gradle wrapper downloads Gradle from
-|
-|
-\---info  <-------------------- Folder that can be used for docs and data files
-|   \                           specific for this project
-|
-\---src
-    +---docs
-    |   \---asciidoc
-    |           changelog.adoc <- Wrapper for the root folder Changelog
-    |           index.adoc <----- A project specific README. Target audience; End users.
-    |
-    +---main
-    |   +---java <--------------- Parent folder of Java kode
-    |   |
-    |   \---resources  <--------- Parent folder of files and folder to include in final jar
-    |       |   application.yml <---------- Micronaut config files. Contains project defaults
-    |       |   application-dev.yml  <----- Contains values specific for local dev env
-    |       |   application-staging.yml <-- Contains values specific for staging env
-    |       |   log4j2.xml <--------------- Config file for Log4j2
-    |       |
-    |       +---assets <------------------- Static www content required by the project
-    |       |       favicon.png
-    |       |
-    |       \---swagger-ui
-    |               index.html <----------- Static index files used by the Swagger-UI plugin
-    |
-    +---test
-    |   +---groovy <----------------------- Groovy(Spock) based unit test files
-    |   |
-    |   +---java <------------------------- Java(Junit5) based unit test files
-    |   |
-    |   \---resources  <------------------- Resources only used during test, not in final jar
-    |          application-test.yml
-    |          log4j2-test.xml
-----
-// Created with: tree /a /f
+=== Backend
 
-=== link:.gitignore[.gitignore]
-Contains files and foldes that Git should not version control.
+* *Framework*: link:https://micronaut.io/[Micronaut]
+* *Language*: Java
+* *Build*: Gradle
+* *API Docs*: Swagger UI / OpenAPI
+* *Testing*: JUnit
+
+=== Frontend
+
+* *Framework*: React
+* *Language*: TypeScript
+* *Build Tool*: Vite
+* *Data Fetching*: TanStack React Query
+* *Styling*: CSS Modules
+* *Linting*: ESLint
+
+== Project Structure
+
 [source,text]
 ----
-include::.gitignore[]
+jap-dashboard/
+├── src/
+│   ├── main/
+│   │   ├── java/dk/rsyd/jap/dashboard/
+│   │   │   ├── gitlab/           # GitLab integration
+│   │   │   ├── harbor/           # Harbor integration
+│   │   │   ├── nomad/            # Nomad integration
+│   │   │   ├── project/          # Project management
+│   │   │   └── Application.java  # Main entry point
+│   │   └── resources/
+│   │       ├── application.yml           # Default config
+│   │       ├── application-dev.yml       # Development config
+│   │       ├── application-staging.yml   # Staging config
+│   │       └── log4j2.xml               # Logging config
+│   ├── test/
+│   │   ├── java/                # Unit tests
+│   │   └── resources/           # Test configuration
+│   └── docs/asciidoc/           # Project documentation
+├── ui/
+│   ├── src/
+│   │   ├── components/          # React components
+│   │   ├── hooks/               # Custom React hooks
+│   │   ├── pages/               # Page components
+│   │   │   ├── dashboard/       # Dashboard pages
+│   │   │   └── project/         # Project pages
+│   │   ├── types/               # TypeScript type definitions
+│   │   └── assets/              # Images and icons
+│   ├── public/                  # Static assets
+│   ├── vite.config.js           # Vite configuration
+│   └── package.json             # Frontend dependencies
+├── gradle/                      # Gradle configuration files
+├── build.gradle                 # Main build configuration
+├── gradle.properties            # Gradle properties
+├── settings.gradle              # Gradle settings
+├── openapi.properties           # OpenAPI/Swagger config
+└── job.nomad                    # Nomad deployment descriptor
 ----
 
-=== link:.editorconfig[.editorconfig]
-Used to control encodings and line endings of src files. Many IDE'e can either interpret this directly or have plugins that can.
-[source,java]
+== Getting Started
+
+=== Prerequisites
+
+* *Java 21*: Required for backend
+* *Gradle*: Build tool (wrapper included)
+* *Node.js 18+*: Required for frontend
+* *pnpm*: Package manager for frontend
+
+== Configuration
+
+=== Application Properties
+
+Configuration is managed through YAML files in `src/main/resources/`:
+
+* *application.yml*: Default settings
+* *application-dev.yml*: Local development overrides
+
+=== Backend Setup
+
+== Variables
+Following environment variables are necessary for fetching data from external services. For local development, it is possible to use personal credentials, but for production, it is recommended to create a service account.
+
+* GITLAB_ACCESS_TOKEN: Personal access token for GitLab API - can be generated in GitLab under User Settings > Access Tokens
+
+* NOMAD_SECRET_ID: Secret ID for Nomad API authentication - can be created in Nomad under Access Control > Secrets
+
+* AD_USER: Active Directory username for authentication - must have appropriate permissions to access required resources
+* AD_PASSWORD: Active Directory password for authentication
+
+. Build and run:
++
+[source,bash]
 ----
-include::.editorconfig[]
+# Build the project
+./gradlew build
+
+# Run the application
+./gradlew run
 ----
-=== link:.gitlab-ci.yml[gitlab-ci.yml]
- Config file for GitLab build system
++
+The backend will be available at `http://localhost:8080`
 
-- Usage with baseline Docker build image
-- Pick up Test output and fail on test
-- Automatic and Manual deploy
-- limit build to specif branches
+. View API Documentation:
++
+* Swagger UI: `http://localhost:8080/swagger-ui.html`
+* OpenAPI spec: `http://localhost:8080/openapi.yaml`
 
-- Deploy Nomad and different envs
-- Gitlab env vars substitution
+=== Frontend Setup
 
-[source,yml]
+. Navigate to UI directory:
++
+[source,bash]
 ----
-include::.gitlab-ci.yml[]
-----
-
-=== link:build.gradle[build.gradle]
-The Gradle project uses a list of different plugins to ensure a better overall quality of the project.
-
-- Move versions to link:gradle.properties[gradle.properties]
-- Large plugin configurations should be moved to separate files and then included.
-
-A selection of HOWTO's and work notes on link:http://klogebog.jap.rsyd.net/[klogebog]
-[source,groovy]
-----
-include::build.gradle[]
+cd ui
 ----
 
-==== link:gradle/java.gradle[java.gradle]
-[source,groovy]
+. Install dependencies:
++
+[source,bash]
 ----
-include::gradle/java.gradle[]
-----
-
-==== link:gradle/docker.gradle[docker.gradle]
-[source,groovy]
-----
-include::gradle/docker.gradle[]
+pnpm install
 ----
 
-==== link:gradle/repositories.gradle[repositories.gradle]
-[source,groovy]
+. Development server:
++
+[source,bash]
 ----
-include::gradle/repositories.gradle[]
+pnpm dev
+----
++
+Frontend will be available at `http://localhost:5173`
+
+=== Key Configuration Options
+
+[source,yaml]
+----
+micronaut:
+  application:
+    name: jap-dashboard
+  server:
+    port: 8080
+
+gitlab:
+  # GitLab API configuration
+
+harbor:
+  # Harbor registry configuration
+
+nomad:
+  # Nomad cluster configuration
 ----
 
-==== link:gradle/asciidoc.gradle[asciidoc.gradle]
-[source,groovy]
+== API Documentation
+
+The application exposes a comprehensive RESTful API documented with OpenAPI 3.0 specification.
+
+Full API documentation is available at:
+
+* *Swagger UI*: `http://localhost:8080/swagger-ui.html`
+* *OpenAPI YAML*: `http://localhost:8080/openapi.yaml`
+
+== Testing
+
+=== Backend Tests
+
+[source,bash]
 ----
-include::gradle/asciidoc.gradle[]
+# Run all tests
+./gradlew test
+
+# Run specific test class
+./gradlew test --tests ClassName
+
+# Generate coverage report
+./gradlew jacocoTestReport
 ----
 
-=== link:src/main/resources/log4j2.xml[log4j2.xml]
-Collection of link:http://jap.regis.rsyd.net/klogebog/JAP/Logging.html[logging work notes]
-[source,xml]
-....
-include::src/main/resources/log4j2.xml[]
-....
+=== Additional Resources
 
-=== link:job.nomad[job.nomad]
-Collection of link:http://jap.regis.rsyd.net/klogebog/JAP/Nomad.html[Nomad work notes]
-
-.Baseline Nomad deployment file
-[source,hcl]
-----
-include::job.nomad[]
-----
-<1> Whenever a new project is created a new set of credentials should be created in Gitlab `Settings->Repository->Deploy Tokens`
-
-== Development process
-Before work is started on a feature create a new branch and commit all related work on that branch. Either through Gitlab or locally.
-Changes are then pushed to Gitlab where a successful build can be deployed on our runtime platform.
-
-=== Git
-Small collection of link:http://klogebog.jar.rsyd.net/[Git work notes]
-
-Guide on how to write good link:http://klogebog.jar.rsyd.net/[Git Commit Messages]
-
-// TODO === IDEA Config
-
-== Release process
-The release process is done by using Git and Gradle plugins.
-
-We strive to adhere to a link:https://semver.org/[Semantic version schema]
-
-By using Git tag's the versioning of the projects artifacts is done automatically. A Gradle plugin populates the version form Git metadata and then updates the `$project.version` accordingly.
-This version number is also used by the Gradle Docker plugin to populate the Docker Image Version
-
-=== Changelog
-The base project will ensure that a changelog can be included in the project documentation when deployed.
-Format of the of changelog should adhere to the link:https://keepachangelog.com/[Keep a Changelog] format.
-
-More on how to work with the change log setup link:http://klogebog.jar.rsyd.net/[JAP Changelog]
-
-== TODO
-- Missing description of often used Gradle commands
-- Git daily commands and release commands
-
-=== Multiple Java Micronaut Gradle Projekt
-
-===  Mixed Java Micronaut Gradle og JavaScript project
+* link:https://docs.micronaut.io/[Micronaut Documentation]
+* link:https://react.dev[React Documentation]
+* link:https://vitejs.dev/[Vite Guide]
+* link:https://swagger.io/specification/[OpenAPI/Swagger]
+* link:http://klogebog.jap.rsyd.net/[JAP Project Knowledge Base]
 

@@ -41,13 +41,6 @@ property:
       eu-member: false
 
 ---
-flyway:
-  datasources:
-    default:
-      enabled: true
-      locations:
-        - classpath:db
----
 micronaut:
   security:
     token:
@@ -65,9 +58,3 @@ micronaut:
 logger:
   levels:
     io.micronaut.data.query: TRACE
-
-test-resources:
-  containers:
-    mssql:
-      accept-license: true
-      image: mcr.microsoft.com/mssql/server:2019-latest
