@@ -17,7 +17,7 @@ public interface HarborClient {
     @Get(
         "projects/${harbor.project}/repositories/{projectName}/artifacts/{reference}" +
             "?page=1" +
-            "&page_size=5" +
+            "&page_size=1" +
             "&with_tag=true&with_label=true" +
             "&with_scan_overview=true&with_sbom_overview=true" +
             "&with_accessory=false" +
